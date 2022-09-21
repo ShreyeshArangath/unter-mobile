@@ -7,10 +7,12 @@ Please follow this guide to get started with local development
 Please read the [contribution guide](contributing.md) to learn more!
 
 ## Getting started 
+
+### Mobile App Development 
 1. Clone and install the required dependencies 
 ```
 git clone git@github.com:ShreyeshArangath/unter_mobile_app.git
-cd unter 
+cd unter/mobile-app 
 yarn install 
 ```
 2. Install the `Expo Go` app on your mobile device. This will let you connect to the local development environment and remotely build your application 
