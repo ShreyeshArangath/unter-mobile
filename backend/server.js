@@ -35,9 +35,15 @@ const {
     GetMongoClient
 } = require('./src/shared/mongo_helper')
 
+// Controllers 
+const { TripController } = require('./src/controllers/trip_controller');
+
 // Repository
 const {UserRepository} = require('./src/repository/user_repository');
 const { FirebaseBundle } = require('./src/shared/firebase_helper');
+const { TripRepository } = require('./src/repository/trip_repository');
+
+
 
 const mongoClient = GetMongoClient(MONGO_URI, MONGO_DB_NAME);
 const firebaseBundle = new FirebaseBundle(FirebaseConfig);
@@ -61,7 +67,16 @@ app.use(bodyParser.urlencoded({
 /**
  *  Handlers & API routes
  */
+// Handler
+const { getTripHandler } = require('./src/handlers/trip_handler');
 
+// Dependencies 
+const tripRepo = new TripRepository(firebaseBundle)
+
+const tripCont = new TripController(tripRepo)
+
+
+app.use('/api/trips', getTripHandler(tripCont))
 
 /**
  *  Server Start

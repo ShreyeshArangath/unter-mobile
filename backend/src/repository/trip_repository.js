@@ -1,18 +1,20 @@
+const { collection, doc, getDocs } = require("firebase/firestore")
+
 class TripRepository {
+
     constructor(firebaseBundle) {
         this._firebaseBundle = firebaseBundle
     }
 
     async getTrips() {
-        const db = firebase.database(); 
-            let Query = db.collection('Trips')
-                .orderBy('startTime');
-        return await Query.get();
+        const db = this._firebaseBundle.cloudFirestore 
+        const querySnapshot = await getDocs(collection(db, "Trips"));
+        return querySnapshot
     }
 
     async getTripsWithDriverID(driverID) {
-        const db = firebase.database(); 
-        let Query = db.collection('Trips')
+        const db = this._firebaseBundle.cloudFirestore 
+        let querySnapshot = await getDocs(collection(db, "Trips"))
             .where('driverID', '==', driverID)
             .orderBy('startTime');
         return await Query.get();
