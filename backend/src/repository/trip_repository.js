@@ -14,7 +14,7 @@ class TripRepository {
         const db = firebase.database(); 
         let Query = db.collection('Trips')
             .where('driverID', '==', driverID)
-            .orderBy('tartTime');
+            .orderBy('startTime');
         return await Query.get();
     }
 
@@ -28,7 +28,7 @@ class TripRepository {
 
     async getTrip(tripID) {
         const dbTripRef = firebase.database().ref('Trips/'+tripID);
-        return dbTripRef.get()
+        return await dbTripRef.get()
     }
 
     async createTrip(passID, startLocation) {
@@ -44,7 +44,7 @@ class TripRepository {
             'startTime' : new Date().toLocaleString(),
             'status' : 'in_queue'
         })
-        return newTrip.key()
+        return await newTrip.key()
     }
 
     async setTripDriver(tripID, driverID) {
