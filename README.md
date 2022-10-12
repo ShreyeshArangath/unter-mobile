@@ -13,6 +13,9 @@ Please read the [contribution guide](contributing.md) to learn more!
 ```
 git clone git@github.com:ShreyeshArangath/unter_mobile_app.git
 cd unter/mobile-app 
+//https://stackoverflow.com/questions/59830102/error-while-updating-property-fill-of-a-view-managed-by-rnsvgreact
+
+//for notifications look at https://wix.github.io/react-native-notifications/docs/getting-started/
 yarn install 
 ```
 2. Install the `Expo Go` app on your mobile device. This will let you connect to the local development environment and remotely build your application 
