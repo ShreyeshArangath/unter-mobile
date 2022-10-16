@@ -6,6 +6,9 @@ import {
   FormControl,
   Input,
   NativeBaseProvider,
+  extendTheme,
+  VStack,
+  Box,
 } from 'native-base';
 import { useState } from 'react';
 import { Dimensions } from 'react-native';
@@ -14,7 +17,7 @@ import { Dimensions } from 'react-native';
 import { Passenger } from './Users/Passenger';
 import { Admin } from './Users/Admin';
 import { Driver } from './Users/Driver';
-import { UIUser } from './Users/Shared';
+import { TempClass, UIUser } from './Users/Shared';
 
 //the main function of the program, like main() in C.
 export default () => {
@@ -26,9 +29,9 @@ export default () => {
 
     //stores these in an object so we can pass them by reference 
     //to the other UI functions
-    let uiPassenger = new UIUser(showPassenger, setPassenger);
-    let uiAdmin = new UIUser(showAdmin, setAdmin);
-    let uiDriver = new UIUser(showDriver, setDriver);
+    let uiPassenger = new UIUser(showPassenger, setPassenger, new TempClass("Passenger"));
+    let uiAdmin = new UIUser(showAdmin, setAdmin, new TempClass("Admin"));
+    let uiDriver = new UIUser(showDriver, setDriver, new TempClass("Driver"));
 
     //used to store the HTML Element object that stores our UI code
     let activeCode;//the code we are returning to run 
@@ -36,7 +39,7 @@ export default () => {
 
     //do these functions if the boolean saying to do them is enabled
     if (showPassenger)
-        activeCode = Passenger(uiPassenger, uiDriver);
+        activeCode = Passenger(uiPassenger);
     else if (showAdmin)
         activeCode = Admin(uiAdmin);
     else if (showDriver)
@@ -46,10 +49,13 @@ export default () => {
     else {
         activeCode = (
             <NativeBaseProvider>
-                <Center flex={1} bg="blue.600">
-                    <Button onPress={() => { setPassenger(true) }}>Show Passenger View</Button>
-                    <Button onPress={() => { setAdmin(true) }}>Select Admin View</Button>
-                    <Button onPress={() => { setDriver(true) }}>Select Driver View</Button>
+                <Center flex={1} bg={"#123456"}>
+                    <Button style={{marginTop: "1%"}} 
+                        onPress={() => { setPassenger(true) }}>Show Passenger View</Button>
+                    <Button style={{marginTop: "4%"}} 
+                        onPress={() => { setAdmin(true) }}>Select Admin View</Button>
+                    <Button style={{marginTop: "4%"}} 
+                        onPress={() => { setDriver(true) }}>Select Driver View</Button>
                 </Center>
             </NativeBaseProvider>
         )

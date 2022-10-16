@@ -11,15 +11,17 @@ import { useState } from 'react';
 import { Dimensions } from 'react-native';
 
 
-import {UIUser} from './Shared';
+import {Tripinfo, TopMenuBar, UserMap, TripButtons, Instructions} from './Shared';
 
 
 export const Driver = (showDrvr) => {
     return (
         <NativeBaseProvider>
-            <Center flex={1} bg="black">
-                <Button onPress={() => showDrvr.set(false)}>Driver Return</Button>
-            </Center>
+            <TopMenuBar color={"#230903"} amIStaying={showDrvr} />
+            <UserMap />
+            <Instructions currentUser={showDrvr.currentUser} />
+            <Tripinfo currentUser={showDrvr.currentUser} />
+            <TripButtons currentUser={showDrvr.currentUser} />
         </NativeBaseProvider>
         );
   }

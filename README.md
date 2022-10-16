@@ -14,6 +14,7 @@ Please read the [contribution guide](contributing.md) to learn more!
 git clone git@github.com:ShreyeshArangath/unter_mobile_app.git
 npm install expo
 npm install -g sharp-cli
+npx expo install react-native-svg@12.3.0
 cd unter/mobile-app 
 //https://stackoverflow.com/questions/59830102/error-while-updating-property-fill-of-a-view-managed-by-rnsvgreact
 

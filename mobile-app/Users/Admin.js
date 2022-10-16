@@ -11,14 +11,12 @@ import { useState } from 'react';
 import { Dimensions } from 'react-native';
 
 
-import {UIUser} from './Shared';
+import {TempClass, TopMenuBar, UserMap, TripButtons, Instructions} from './Shared';
 
 export const Admin = (showAdmn) => {
     return (
         <NativeBaseProvider>
-            <Center flex={1} bg="amber.600">
-                <Button onPress={() => showAdmn.set(false)}>admin Return</Button>
-            </Center>
+            <TopMenuBar color={"#729EA1"} amIStaying={showAdmn} />
         </NativeBaseProvider>
         );
   }
