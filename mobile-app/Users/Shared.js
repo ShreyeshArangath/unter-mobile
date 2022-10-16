@@ -200,6 +200,7 @@ export function Tripinfo(props)
             break;
         
             default:
+                SelectedReactCode = <Text>module not defined for driver on this ui mode</Text>
                 break;
         }
     }
