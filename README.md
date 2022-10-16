@@ -10,8 +10,7 @@ Please read the [contribution guide](contributing.md) to learn more!
 
 ### Mobile App Development 
 1. Clone and install the required dependencies (like nodejs if you do not have it already installed)
-```
-git clone git@github.com:ShreyeshArangath/unter_mobile_app.git
+
 cd unter/mobile-app 
 
 yarn install 
