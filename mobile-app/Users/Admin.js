@@ -16,7 +16,7 @@ import {TempClass, TopMenuBar, UserMap, TripButtons, Instructions} from './Share
 export const Admin = (showAdmn) => {
     return (
         <NativeBaseProvider>
-            <TopMenuBar color={"#729EA1"} amIStaying={showAdmn} />
+            <TopMenuBar color={"#729EA1"} keepingUser={showAdmn} />
         </NativeBaseProvider>
         );
   }

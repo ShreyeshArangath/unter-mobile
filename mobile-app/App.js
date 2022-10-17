@@ -13,7 +13,7 @@ import {
 import { useState } from 'react';
 import { Dimensions } from 'react-native';
 
-//importing the code foe the Other UI's
+//importing the code for the Other UI's
 import { Passenger } from './Users/Passenger';
 import { Admin } from './Users/Admin';
 import { Driver } from './Users/Driver';

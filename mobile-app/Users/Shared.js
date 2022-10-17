@@ -26,8 +26,6 @@ export class TempClass
 
         this.UIMode = UIMode;
         this.UIModeModifyer = UIModeModifyer;
-
-        //console.log("ctor: " + this.type + ": " + this.UIMode);
     }
 }
 
@@ -46,9 +44,10 @@ export function TopMenuBar(props)
     return (
     <Box bg={props.color}>
         <Button style={{marginTop: "10%", marginRight: "auto"}} 
-        onPress={() => props.amIStaying.set(false)}>{"   <   "}</Button>
+        onPress={() => props.keepingUser.set(false)}>{"   <   "}</Button>
+        
         <Text color={"#ffffff"} position={"absolute"} right={2} top={"10"}>
-            {props.amIStaying.currentUser.UIMode +  ": " + props.amIStaying.currentUser.type}
+            {props.keepingUser.currentUser.UIMode +  ": " + props.keepingUser.currentUser.type}
         </Text>
     </Box>
     );
