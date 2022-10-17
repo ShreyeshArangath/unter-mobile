@@ -6,7 +6,6 @@ import {
     FormControl,
     Input,
     NativeBaseProvider,
-    Box,
 } from 'native-base';
 import { useState } from 'react';
 import { Dimensions } from 'react-native';
