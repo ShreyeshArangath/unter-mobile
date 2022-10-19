@@ -1,99 +1,159 @@
-const { collection, doc, getDocs } = require("firebase/firestore")
+const { collection, doc, getDocs, addDoc, query, where, deleteDoc,updateDoc, orderBy, limitToLast, setDoc, limit} = require("firebase/firestore")
 
 class TripRepository {
 
     constructor(firebaseBundle) {
-        this._firebaseBundle = firebaseBundle
-    }
-
-    async getTrips() {
-        const db = this._firebaseBundle.cloudFirestore 
-        const querySnapshot = await getDocs(collection(db, "Trips"));
-        return querySnapshot
-    }
-
-    async getTripsWithDriverID(driverID) {
-        const db = this._firebaseBundle.cloudFirestore 
-        let querySnapshot = await getDocs(collection(db, "Trips"))
-            .where('driverID', '==', driverID)
-            .orderBy('startTime');
-        return await Query.get();
-    }
-
-    async getTripsWithPassengerID(passID) {
-        const db = firebase.database(); 
-        let Query = db.collection('Trips')
-            .where('passID', '==', passID)
-            .orderBy('startTime');
-        return await Query.get();
+        this._isLogQuery = true
+        this._db = firebaseBundle.cloudFirestore
     }
 
     async getTrip(tripID) {
-        const dbTripRef = firebase.database().ref('Trips/'+tripID);
-        return await dbTripRef.get()
+        if (this._isLogQuery) console.log('Getting Trip with tripID: ' + tripID)
+
+        const querySnapshot = await getDocs(query(collection(this._db, 'Trips'),
+            where("__name__", "==", tripID)))
+        var jsonResult = {}
+        querySnapshot.forEach(doc => {
+            jsonResult[doc.id] = doc.data()
+        });
+        return jsonResult
     }
 
-    async createTrip(passID, startLocation) {
-        const dbTripRef = firebase.database().ref('Trips');
-        newTrip = dbTripRef.push({
-            'driverID' : 'NULL',
-            'driverRating' : -1,
-            'endLoc' : [0,0],
-            'endTime' : 0,
-            'passID' : passID,
-            'passRating' : -1,
-            'startLoc' : startLocation,
-            'startTime' : new Date().toLocaleString(),
-            'status' : 'in_queue'
-        })
-        return await newTrip.key()
+    async getAllTrips() {
+        if (this._isLogQuery) console.log('Getting All Trips')
+
+        const querySnapshot = await getDocs(collection(this._db, 'Trips'));
+        var jsonResult = {}
+        querySnapshot.forEach(doc => {
+            jsonResult[doc.id] = doc.data()
+        });
+        return jsonResult
     }
 
-    async setTripDriver(tripID, driverID) {
-        const dbTripRef = firebase.database().ref('Trips/'+tripID);
-        newTrip = dbTripRef.set({
-            'driverID' : driverID,
-            'status' : 'to_pass'
-        })
+    async getTripsWithDriverID(driverID) {
+        if (this._isLogQuery) console.log('Getting Trip with driverID: ' + driverID)
+
+        const querySnapshot = await getDocs(query(collection(this._db, 'Trips'),
+            where("driverID", "==", driverID)))
+        var jsonResult = {}
+        querySnapshot.forEach(doc => {
+            jsonResult[doc.id] = doc.data()
+        });
+        return jsonResult
     }
 
-    /*STATUS MUST BE: in_queue, to_pass, wait_pass, on_delivery, completed, pass_cancel, driver_cancel*/
-    async updateTripStatus(tripID, status) {
-        const dbTripRef = firebase.database().ref('Trips/'+tripID);
-        newTrip = dbTripRef.set({
-            'status' : status
-        })
+    async getTripsWithPassengerID(passID) {
+        if (this._isLogQuery) console.log('Getting Trip with passengerID: ' + passID)
+
+        const querySnapshot = await getDocs(query(collection(this._db, 'Trips'),
+            where("passID", "==", passID)))
+        var jsonResult = {}
+        querySnapshot.forEach(doc => {
+            jsonResult[doc.id] = doc.data()
+        });
+        return jsonResult
+    }
+
+    async getNextTrip(trip_status) {
+        if (this._isLogQuery) console.log('Getting Longest Waiting Trip')
+
+        const querySnapshot = await getDocs(
+                query(  collection(this._db, 'Trips'),
+                        where("status", "==", trip_status),
+                        orderBy("startTime", "asc"),
+                        limit(1)
+                )
+            )
+        var jsonResult = {}
+        querySnapshot.forEach(doc => {
+            jsonResult[doc.id] = doc.data()
+        });
+        return jsonResult
+    }
+
+    async createTrip(passID, starting_trip) {
+        if (this._isLogQuery) console.log('Creating Trip with passengerID: ' + passID)
+
+        var newTrip = await addDoc(
+            collection(this._db, 'Trips'),
+            starting_trip
+        )
+        return newTrip.id
+    }
+
+    async setTripDriver(tripID, driverID, driver_to_pick_up_status) {
+        if (this._isLogQuery) console.log('Setting Trip '+ tripID + ' to have driver: ' + driverID)
+
+        return await updateDoc(
+            doc(this._db, 'Trips/'+tripID),
+            {
+                'driverID' : driverID,
+                'status' : driver_to_pick_up_status
+            }
+        )
+    }
+
+    async updateTripStatus(tripID, new_status) {
+        if (this._isLogQuery) console.log('Setting Trip '+ tripID + ' to have status: ' + new_status)
+
+        return await updateDoc(
+            doc(this._db, 'Trips/'+tripID),
+            {
+                'status' : new_status
+            }
+        )
     }
     
-    async endTrip(tripID, endLocation) {
-        const dbTripRef = firebase.database().ref('Trips/'+tripID);
-        newTrip = dbTripRef.set({
-            'endLoc' : endLocation,
-            'endTime' : new Date().toLocaleString(),
-            'status' : 'completed'
-        })
+    async endTrip(tripID, att_updating) {
+        if (this._isLogQuery) console.log('Ending Trip: '+ tripID)
+
+        return await updateDoc(
+            doc(this._db, 'Trips/'+tripID),
+            att_updating
+        )
     }
 
     async setTripDriverRating(tripID, rating) {
-        const dbTripRef = firebase.database().ref('Trips/'+tripID);
-        newTrip = dbTripRef.set({
-            'driverRating' : rating
-        })
+        if (this._isLogQuery) console.log('Setting Driver Rating for Trip: '+ tripID + ' Rating: ' + rating)
+
+        return await updateDoc(
+            doc(this._db, 'Trips/'+tripID),
+            {
+                'driverRating' : rating
+            }
+        )
     }
 
     async setTripPassengerRating(tripID, rating) {
-        const dbTripRef = firebase.database().ref('Trips/'+tripID);
-        newTrip = dbTripRef.set({
-            'passRating' : rating
-        })
+        if (this._isLogQuery) console.log('Setting Passenger Rating for Trip: '+ tripID + ' Rating: ' + rating)
+
+        return await updateDoc(
+            doc(this._db, 'Trips/'+tripID),
+            {
+                'passRating' : rating
+            }
+        )
     }
 
     async deleteTrip(tripID) {
-        const dbTripRef = firebase.database().ref('Trips/'+tripID);
-        dbTripRef.remove()
-            .catch(function(error) {
-                console.log("Remove failed: " + error.message)
-            });
+        if (this._isLogQuery) console.log('Deleting Trip with tripID: ' + tripID)
+
+        var response = "Success"
+        await deleteDoc( 
+            doc(collection(this._db, 'Trips'), tripID)
+        )
+        .catch(function(error) {
+            console.log("Remove failed: " + error.message)
+            response = "Failed"
+        });
+        return response
+    }
+
+    async setUltimateAttr(tripID, attributes) {
+        if (this._isLogQuery) console.log('Setting 1+ attributes for Trip: '+ tripID)
+
+        return await updateDoc(
+            doc(this._db, 'Trips/'+tripID), attributes)
     }
 }
 
