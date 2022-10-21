@@ -1,4 +1,4 @@
-import {useSafeArea, NativeBaseProvider} from 'native-base';
+import {useSafeArea, NativeBaseProvider, Center, Button} from 'native-base';
 import { useEffect, useState } from 'react';
 import {GOOGLE_MAPS_API_KEY} from '@env';
 
@@ -41,10 +41,6 @@ export default function App() {
       });
       console.log(region)
     }).catch((err) => {
-        setRegion({
-          latitude: 37.78825, 
-          longitude: -122.4324 
-      })
       console.log(err)
     })
   }
