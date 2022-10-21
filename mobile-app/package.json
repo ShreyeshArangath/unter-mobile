@@ -13,7 +13,9 @@
     "@expo/webpack-config": "^0.17.0",
     "@react-native-community/geolocation": "^3.0.2",
     "expo": "~46.0.9",
+    "expo-location": "~14.3.0",
     "expo-status-bar": "~1.4.0",
+    "firebase": "^9.12.1",
     "native-base": "^3.4.17",
     "react": "18.0.0",
     "react-dom": "18.0.0",
@@ -23,8 +25,7 @@
     "react-native-google-places-autocomplete": "^2.4.1",
     "react-native-maps": "0.31.1",
     "react-native-svg": "12.3.0",
-    "react-native-web": "~0.18.7",
-    "expo-location": "~14.3.0"
+    "react-native-web": "~0.18.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

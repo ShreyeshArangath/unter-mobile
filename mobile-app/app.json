@@ -6,6 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "packagerOpts": {
+      "sourceExts": ["cjs"]
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
