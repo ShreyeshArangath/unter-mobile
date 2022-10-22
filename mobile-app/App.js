@@ -15,8 +15,6 @@ import { Dimensions } from 'react-native';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {GOOGLE_MAPS_API_KEY} from '@env';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
 const baseUrl = 'http://10.172.85.36:9001/api/trips/id/Trip'
 
 
