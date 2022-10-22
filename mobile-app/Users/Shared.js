@@ -29,7 +29,7 @@ export class UsersClass
         this.type = type;
 
         //make these to allow us to modify values inside of react style code
-        const [UIMode, UIModeModifyer] = useState(1);
+        const [UIMode, UIModeModifyer] = useState("Start Screen");
         const [id, idModifyer] = useState("");
         const [data, dataModifyer] = useState("");
 

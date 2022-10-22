@@ -55,14 +55,29 @@ export default () => {
             <NativeBaseProvider>
                 <Center flex={1} bg={"#123456"}>
                     <Button style={{marginTop: "1%"}} 
-                        onPress={() => { setPassenger(true) }}>Show Passenger View</Button>
+                        onPress={() => { selectPassenger() }}>Show Passenger View</Button>
                     <Button style={{marginTop: "4%"}} 
-                        onPress={() => { setAdmin(true) }}>Select Admin View</Button>
+                        onPress={() => { selectAdmin() }}>Select Admin View</Button>
                     <Button style={{marginTop: "4%"}} 
-                        onPress={() => { setDriver(true) }}>Select Driver View</Button>
+                        onPress={() => { selectDriver() }}>Select Driver View</Button>
                 </Center>
             </NativeBaseProvider>
         )
+    }
+
+    function selectPassenger()
+    {
+        uiPassenger.currentUser.UIModeModifyer("Pick Location");
+        setPassenger(true); 
+    }
+    function selectAdmin()
+    {
+        setAdmin(true); 
+    }
+    function selectDriver()
+    {
+        uiDriver.currentUser.UIModeModifyer("Confirm Trip");//todo: remove once we added the rest of the up screens for driver
+        setDriver(true);
     }
 
     //return whatever active code we decided we are using this frame

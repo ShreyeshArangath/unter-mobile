@@ -34,24 +34,24 @@ export function Tripinfo(props)
     if(props.currentUser.type == "Passenger")
     {
         switch (props.currentUser.UIMode) {
-            case 1:
+            case "Pick Location":
                 SelectedReactCode = <>
                     <Input variant="rounded" onChangeText={handleStartingLocationChange} placeholder="Starting location"/>
                     <Input variant="rounded" onChangeText={handleDestinationChange} placeholder="Destination"/>
                 </>
                 break;
-            case 2:
+            case "Confirm Location":
                 SelectedReactCode = <>
                     <Button width={"100%"} onPress={()=>props.currentUser.UIModeModifyer(1)}>{(startinglocation != "")?startinglocation:"starting location is NotDefined"}</Button>
                     <Button width={"100%"} onPress={()=>props.currentUser.UIModeModifyer(1)}>{(destination != "")?destination:"destination is NotDefined"}</Button>                  
                 </>
                 break;
-            case 3:
+            case "Locating Ride":
                 SelectedReactCode = <>
                     <Text>{"Average wait time to find a ride: 5min"}</Text>
                 </>
                 break;
-            case 4:
+            case "Ride Found":
                 SelectedReactCode = <>
                     <Text>{"Driver is about " + "2min" + " away, please meet at " + startinglocation}</Text>
                 </>
@@ -64,14 +64,14 @@ export function Tripinfo(props)
     else if(props.currentUser.type == "Driver")
     {
         switch (props.currentUser.UIMode) {
-            case 3:
+            case "Confirm Trip":
             SelectedReactCode = <>
                 <Text>{"Pickup location: " + startinglocation}
                 </Text>
             </>
             break;
-            case 4:
-            case 5:
+            case "Waiting on Passenger":
+            case "Dropping off Passenger":
             SelectedReactCode = <>
                 <Text>{"Drop off location: " + destination}</Text>
             </>

@@ -21,25 +21,25 @@ export function Instructions(props)
     if(props.currentUser.type == "Passenger")
     {
         switch (props.currentUser.UIMode) {
-            case 1:
+            case "Pick Location":
                 SelectedReactCode = <>
                     <Text fontSize={"15"}>Please enter a destination</Text>
                     <Text fontSize={"10"}>Where are you going today</Text>
                 </>
                 break;
-            case 2:
+            case "Confirm Location":
                 SelectedReactCode = <>
                     <Text fontSize={"15"}>Confirm Destination</Text>
                     <Text fontSize={"10"}>Lets review your planned journey</Text>
                 </>
                 break;
-            case 3:
+            case "Locating Ride":
                 SelectedReactCode = <>
                     <Text fontSize={"15"}>Locating Rides</Text>
                     <Text fontSize={"10"}>finding the rides closest to you</Text>
                 </>
                 break;
-            case 4:
+            case "Ride Found":
                 SelectedReactCode = <>
                     <Text fontSize={"15"}>Rides found</Text>
                     <Text fontSize={"10"}>Hang tight, we'll be there shortly</Text>
@@ -53,17 +53,17 @@ export function Instructions(props)
     else if(props.currentUser.type == "Driver")
     {
         switch (props.currentUser.UIMode) {
-            case 3:
+            case "Confirm Trip":
             SelectedReactCode = <>
                 <Text fontSize={"15"}>Nearest Passenger</Text>
             </>
             break;
-            case 4:
+            case "Waiting on Passenger":
             SelectedReactCode = <>
                 <Text fontSize={"15"}>Waiting for passenger to Enter</Text>
             </>
             break;
-            case 5:
+            case "Dropping off Passenger":
             SelectedReactCode = <>
                 <Text fontSize={"15"}>Drop off passenger</Text>
             </>
