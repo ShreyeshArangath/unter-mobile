@@ -22,8 +22,8 @@ export const Passenger = (props) => {
 
     return (
         <NativeBaseProvider safeArea>
-            <TopMenuBar color={"#B53838"} keepingUser={props.showPass} />
             <UserMap />
+            <TopMenuBar color={"#B53838"} keepingUser={props.showPass} />
             <Instructions currentUser={props.showPass.currentUser} />
             <Tripinfo currentUser={props.showPass.currentUser} />
             <TripButtons currentUser={props.showPass.currentUser} />

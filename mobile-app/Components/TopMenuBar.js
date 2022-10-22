@@ -17,7 +17,7 @@ import React, { Component, useState } from 'react';
 export function TopMenuBar(props)
 {
     return (
-    <Box bg={props.color}>
+    <Box position={"absolute"} width={"100%"} top={"0%"} bg={props.color}>
         <Button style={{marginTop: "10%", marginRight: "auto"}} 
         onPress={() => props.keepingUser.set(false)}>{"   <   "}</Button>
         
