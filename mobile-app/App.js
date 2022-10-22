@@ -15,7 +15,7 @@ import GoogleMap from './components/google_map';
 import GoogleMapSearch from './components/google_map_search';
 import { SafeAreaView } from 'react-native';
 import * as Location from 'expo-location';
-import * as API from './api/live_location';
+
 const firebaseConfig = {
   "apiKey": FIREBASE_apiKey, 
   "authDomain": FIREBASE_authDomain, 
@@ -72,12 +72,6 @@ export default function App() {
   //used to store the HTML Element object that stores our UI code
   let activeCode;//the code we are returning to run 
 
-
-
-  pass = new API.UserLiveLocationInfo("shreyesh", 35.5625, 100.3636)
-  // driver = new API.UserLiveLocationInfo("habsf", 35.43, 21.323)
-  // ll = new API.LiveLocation("fenmfkma;emf;qw2", pass, driver)
-  API.updateUserLiveLocationInfo(realTimeDatabase, "fenmfkma;emf;qw2", API.UserTypeHeader.Passenger, pass)
   //do these functions if the boolean saying to do them is enabled
   if (showPassenger)
       activeCode = Passenger(uiPassenger, uiDriver);
