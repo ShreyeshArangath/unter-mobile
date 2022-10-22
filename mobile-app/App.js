@@ -16,7 +16,10 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {GOOGLE_MAPS_API_KEY} from '@env';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import {GOOGLE_MAPS_API_KEY} from '@env';
 const baseUrl = 'http://10.172.85.36:9001/api/trips/id/Trip'
+
 
 
 //importing the code for the Other UI's
@@ -25,12 +28,10 @@ import { Admin } from './Users/Admin';
 import { Driver } from './Users/Driver';
 import { UsersClass } from './Users/Shared';
 import { UIUser } from './Components/UIUser';
-import { UIUser } from './Users/Shared';
 import GoogleMap from './components/google_map';
 import GoogleMapSearch from './components/google_map_search';
 import { SafeAreaView } from 'react-native';
 import * as Location from 'expo-location';
-
 
 export default function App() {
   const [location, setLocation] = useState(null);
@@ -70,8 +71,8 @@ export default function App() {
     let uiAdmin = new UIUser(showAdmin, setAdmin, new UsersClass("Admin"));
     let uiDriver = new UIUser(showDriver, setDriver, new UsersClass("Driver"));
 
-    //used to store the HTML Element object that stores our UI code
-    let activeCode;//the code we are returning to run 
+  //used to store the HTML Element object that stores our UI code
+  let activeCode;//the code we are returning to run 
 
   
 
