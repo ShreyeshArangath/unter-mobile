@@ -11,19 +11,22 @@ import { useState } from 'react';
 import { Dimensions } from 'react-native';
 import React, { Component } from 'react';
 
+import { Tripinfo } from '../Components/TripInfo';
+import { TopMenuBar } from '../Components/TopMenuBar';
+import { UserMap } from '../Components/UserMap';
+import { TripButtons } from '../Components/TripButtons';
+import { Instructions } from '../Components/Instructions';
 
-import {TopMenuBar, UserMap, TripButtons, Instructions, Tripinfo} from './Shared';
 
-
-export const Passenger = (showPass) => {
+export const Passenger = (props) => {
 
     return (
         <NativeBaseProvider>
-            <TopMenuBar color={"#B53838"} keepingUser={showPass} />
+            <TopMenuBar color={"#B53838"} keepingUser={props.showPass} />
             <UserMap />
-            <Instructions currentUser={showPass.currentUser} />
-            <Tripinfo currentUser={showPass.currentUser} />
-            <TripButtons currentUser={showPass.currentUser} />
+            <Instructions currentUser={props.showPass.currentUser} />
+            <Tripinfo currentUser={props.showPass.currentUser} />
+            <TripButtons currentUser={props.showPass.currentUser} />
         </NativeBaseProvider>
         );
   }
