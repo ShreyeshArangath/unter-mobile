@@ -10,19 +10,21 @@ import {
 import { useState } from 'react';
 import { Dimensions } from 'react-native';
 
+import { Tripinfo } from '../Components/TripInfo';
+import { TopMenuBar } from '../Components/TopMenuBar';
+import { UserMap } from '../Components/UserMap';
+import { TripButtons } from '../Components/TripButtons';
+import { Instructions } from '../Components/Instructions';
 
 
-import {Tripinfo, TopMenuBar, UserMap, TripButtons, Instructions} from './Shared';
-
-
-export const Driver = (showDrvr) => {
+export const Driver = (props) => {
     return (
         <NativeBaseProvider>
-            <TopMenuBar color={"#230903"} keepingUser={showDrvr} />
+            <TopMenuBar color={"#230903"} keepingUser={props.showDrvr} />
             <UserMap />
-            <Instructions currentUser={showDrvr.currentUser} />
-            <Tripinfo currentUser={showDrvr.currentUser} />
-            <TripButtons currentUser={showDrvr.currentUser} />
+            <Instructions currentUser={props.showDrvr.currentUser} />
+            <Tripinfo currentUser={props.showDrvr.currentUser} />
+            <TripButtons currentUser={props.showDrvr.currentUser} />
         </NativeBaseProvider>
         );
   }
