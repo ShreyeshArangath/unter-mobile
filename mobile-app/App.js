@@ -1,18 +1,32 @@
-import {useSafeArea, NativeBaseProvider, Center, Button} from 'native-base';
+import {
+  Button,
+  Text,
+  Modal,
+  Center,
+  FormControl,
+  Input,
+  NativeBaseProvider,
+  extendTheme,
+  VStack,
+  Box,
+  useSafeArea,
+} from 'native-base';
+import { Dimensions } from 'react-native';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {GOOGLE_MAPS_API_KEY} from '@env';
+const baseUrl = 'http://10.172.85.36:9001/api/trips/id/Trip'
 
 
-//importing the code foe the Other UI's
+
+//importing the code for the Other UI's
 import { Passenger } from './Users/Passenger';
 import { Admin } from './Users/Admin';
 import { Driver } from './Users/Driver';
-import { UIUser } from './Users/Shared';
-import GoogleMap from './components/google_map';
-import GoogleMapSearch from './components/google_map_search';
+import { UsersClass } from './Users/Shared';
+import { UIUser } from './Components/UIUser';
 import { SafeAreaView } from 'react-native';
 import * as Location from 'expo-location';
-
 
 export default function App() {
   const [location, setLocation] = useState(null);
@@ -48,37 +62,54 @@ export default function App() {
   useEffect(() => { getUserLocation()}, [])
     //stores these in an object so we can pass them by reference 
     //to the other UI functions
-  let uiPassenger = new UIUser(showPassenger, setPassenger);
-  let uiAdmin = new UIUser(showAdmin, setAdmin);
-  let uiDriver = new UIUser(showDriver, setDriver);
+    let uiPassenger = new UIUser(showPassenger, setPassenger, new UsersClass("Passenger"));
+    let uiAdmin = new UIUser(showAdmin, setAdmin, new UsersClass("Admin"));
+    let uiDriver = new UIUser(showDriver, setDriver, new UsersClass("Driver"));
 
   //used to store the HTML Element object that stores our UI code
   let activeCode;//the code we are returning to run 
 
-  //do these functions if the boolean saying to do them is enabled
-  if (showPassenger)
-      activeCode = Passenger(uiPassenger, uiDriver);
-  else if (showAdmin)
-      activeCode = Admin(uiAdmin);
-  else if (showDriver)
-      activeCode = Driver(uiDriver);
-  //if none are specified, do this default code that lets 
-  //you choose the mode to enter in
-  else {
-      activeCode = (
-         <NativeBaseProvider>
-             <Center flex={1} bg="blue.600">
-                 <Button onPress={() => { setPassenger(true) }}>Show Passenger View</Button>
-                 <Button onPress={() => { setAdmin(true) }}>Select Admin View</Button>
-                 <Button onPress={() => { setDriver(true) }}>Select Driver View</Button>
-             </Center>
-         </NativeBaseProvider>
-      )
-  }
-    return (
-    activeCode
-  );
+  
 
+    //do these functions if the boolean saying to do them is enabled
+    if (showPassenger)
+        activeCode = <Passenger showPass={uiPassenger} />
+    else if (showAdmin)
+        activeCode = <Admin showAdmn={uiAdmin}/>;
+    else if (showDriver)
+        activeCode = <Driver showDrvr={uiDriver} />;
+    //if none are specified, do this default code that lets 
+    //you choose the mode to enter in
+    else {
+        activeCode = (
+            <NativeBaseProvider safeArea>
+                <Center flex={1} bg={"#123456"}>
+                    <Button style={{marginTop: "1%"}} 
+                        onPress={() => { selectPassenger() }}>Show Passenger View</Button>
+                    <Button style={{marginTop: "4%"}} 
+                        onPress={() => { selectAdmin() }}>Select Admin View</Button>
+                    <Button style={{marginTop: "4%"}} 
+                        onPress={() => { selectDriver() }}>Select Driver View</Button>
+                </Center>
+            </NativeBaseProvider>
+        )
+    }
+
+    function selectPassenger()
+    {
+        uiPassenger.currentUser.UIModeModifyer("Pick Location");
+        setPassenger(true); 
+    }
+    function selectAdmin()
+    {
+        setAdmin(true); 
+    }
+    function selectDriver()
+    {
+        uiDriver.currentUser.UIModeModifyer("Confirm Trip");//todo: remove once we added the rest of the up screens for driver
+        setDriver(true);
+    }
+
+    //return whatever active code we decided we are using this frame
+    return (activeCode);
 }
-  
-  
