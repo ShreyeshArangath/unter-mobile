@@ -21,7 +21,7 @@ import { Instructions } from '../Components/Instructions';
 export const Passenger = (props) => {
 
     return (
-        <NativeBaseProvider>
+        <NativeBaseProvider safeArea>
             <TopMenuBar color={"#B53838"} keepingUser={props.showPass} />
             <UserMap />
             <Instructions currentUser={props.showPass.currentUser} />

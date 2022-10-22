@@ -19,7 +19,7 @@ import { Instructions } from '../Components/Instructions';
 
 export const Driver = (props) => {
     return (
-        <NativeBaseProvider>
+        <NativeBaseProvider safeArea>
             <TopMenuBar color={"#230903"} keepingUser={props.showDrvr} />
             <UserMap />
             <Instructions currentUser={props.showDrvr.currentUser} />

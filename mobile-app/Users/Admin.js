@@ -19,7 +19,7 @@ import { Instructions } from '../Components/Instructions';
 
 export const Admin = (props) => {
     return (
-        <NativeBaseProvider>
+        <NativeBaseProvider safeArea>
             <TopMenuBar color={"#729EA1"} keepingUser={props.showAdmn} />
         </NativeBaseProvider>
         );
