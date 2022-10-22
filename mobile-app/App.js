@@ -28,8 +28,6 @@ import { Admin } from './Users/Admin';
 import { Driver } from './Users/Driver';
 import { UsersClass } from './Users/Shared';
 import { UIUser } from './Components/UIUser';
-import GoogleMap from './components/google_map';
-import GoogleMapSearch from './components/google_map_search';
 import { SafeAreaView } from 'react-native';
 import * as Location from 'expo-location';
 
