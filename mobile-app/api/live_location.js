@@ -1,33 +1,18 @@
 import {ref, set, update, onValue} from 'firebase/database'
 
-const UserLiveLocationInfo = (userId, lat, long) => {
+const UnterLocation = (lat, long) => {
     return {
-        "userId": userId, 
         "lat": lat, 
-        "long": long 
+        "long": long
     }
 }
-
-const LiveLocation = (tripId, passengerLiveLocationInfo, driverLiveLocationInfo) => {
-    return {
-        "tripId": tripId,
-        "passengerLiveLocationInfo": passengerLiveLocationInfo,
-        "driverLiveLocationInfo":  driverLiveLocationInfo
-    }
-}
-
-const UserTypeHeader = {
-	Passenger: "passengerLiveLocationInfo",
-	Driver: "driverLiveLocationInfo",
-}
-
 
 /**
  * realTimeDB: Reference to the Firebase Real Time Database 
  * liveLocation: obj of type LiveLocation 
  */
-const createTripDocument = async(realTimeDB, liveLocation) => {
-    set(ref(realTimeDB, 'trips/' + liveLocation.tripId), liveLocation) 
+const createTripDocument = async(realTimeDB, userId, location) => {
+    set(ref(realTimeDB, 'users/' + userId), location) 
 }
 
 
@@ -37,12 +22,12 @@ const createTripDocument = async(realTimeDB, liveLocation) => {
  * type: UserTypeHeader
  * userLiveLocationInfo: obj of type UserLiveLocationInfo
  */
-const updateUserLiveLocationInfo = async(realTimeDB, tripId, type, userLiveLocationInfo) => {
+const updateUserLiveLocationInfo = async(realTimeDB, userId, location) => {
     const updates = {}
-    updates[`/trips/${tripId}/${type}`] = userLiveLocationInfo
+    updates[`/users/${userId}/`] = location
     return update(ref(realTimeDB), updates)
 }
 
 export {
-    UserLiveLocationInfo, LiveLocation, UserTypeHeader , createTripDocument, updateUserLiveLocationInfo
+    UnterLocation , createTripDocument, updateUserLiveLocationInfo
 }

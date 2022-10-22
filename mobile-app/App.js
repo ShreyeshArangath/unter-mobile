@@ -15,6 +15,7 @@ import GoogleMap from './components/google_map';
 import GoogleMapSearch from './components/google_map_search';
 import { SafeAreaView } from 'react-native';
 import * as Location from 'expo-location';
+import * as LiveLocation from './api/live_location' 
 
 const firebaseConfig = {
   "apiKey": FIREBASE_apiKey, 
@@ -60,7 +61,6 @@ export default function App() {
       console.log(err)
     })
   }
-
 
   useEffect(() => { getUserLocation()}, [])
     //stores these in an object so we can pass them by reference 
