@@ -16,11 +16,10 @@ export default function GoogleMapSearch(props) {
         placeholder={props.placeholder}
         fetchDetails={true}
         onPress={(data, details) => {
-          const region = {
+          props.setter({
             "latitude": details.geometry.location.lat, 
             "longitude": details.geometry.location.lng, 
-          }
-          props.setter(region)
+          })
         }}
         GooglePlacesSearchQuery={{
             rankby: "distance"
@@ -44,18 +43,14 @@ export default function GoogleMapSearch(props) {
 
   const styles = StyleSheet.create({
     textInput: {
-        backgroundColor: '#eee',
         borderRadius: 20,
-        fontWeight: '300',
-        marginTop: 7,
+        fontWeight: '100',
     },
     textInputContainer:{
-        backgroundColor: '#eee',
         borderRadius: 50,
-        width: "80%",
-        margin: 10,
+        width: "90%",
+        margin: 5,
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight: 10,
     }
 })

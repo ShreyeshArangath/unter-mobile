@@ -13,10 +13,6 @@ const TexasTechDefaultRegion = {
 
 export default function GoogleMap(props) {
     //TODO: Fix marker bug — only one makrer is populated at a time 
-    const OriginMarker = () => {
-        props.origin && 
-        <Marker  key={0} coordinate={{latitude: props.origin.latitude, longitude: props.origin.longitude}} /> }
-    const DestinationMarker = () => props.dest && <Marker key={1} coordinate={{latitude: props.dest.latitude, longitude: props.dest.longitude}} />
     //TODO: Add logic to change region based on origin and destination 
     const [region, setRegion] = useState(TexasTechDefaultRegion)
     
@@ -25,9 +21,12 @@ export default function GoogleMap(props) {
                 style={ styles.map }
                 provider={PROVIDER_GOOGLE}
                 region={region}>
-                {/* TODO: Add logic to add markers based on the locations provided by the user                     */}
-                <OriginMarker />
-                <DestinationMarker />
+              {/* {props.origin && <Marker coordinate={{latitude: props.origin.latitude, longitude: props.origin.longitude}} /> }
+              {props.dest && <Marker coordinate={{latitude: props.dest?.latitude, longitude: props.dest?.longitude}} /> } */
+              }
+              {props.originMarker}
+              {props.destinationMarker}
+              {props.directions}
             </MapView>
     )
 }

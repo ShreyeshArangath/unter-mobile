@@ -1,24 +1,12 @@
-import { HStack, NativeBaseProvider, Text } from "native-base";
+import { HStack, NativeBaseProvider, extendTheme } from "native-base";
 import { NavigationContainer} from "@react-navigation/native";
 import { createNativeStackNavigator} from '@react-navigation/native-stack';
-import { Passenger_Splash, Passenger_PickLocation, LogoTitle } from "./Screens/PassengerScreens";
+import { Passenger_Splash, Passenger_PickLocation, LogoTitle, Passenger_ConfirmLocation } from "./Screens/PassengerScreens";
 import { TopMenuBar } from "./Components/TopMenuBar";
 import {useState, useEffect} from 'react'
 import * as Location from 'expo-location';
-import * as LiveLocation from './api/live_location' 
-
-const firebaseConfig = {
-  "apiKey": FIREBASE_apiKey, 
-  "authDomain": FIREBASE_authDomain, 
-  "projectId": FIREBASE_projectId, 
-  "storageBucket": FIREBASE_storageBucket, 
-  "messengerSenderId": FIREBASE_messagingSenderId, 
-  "appId": FIREBASE_appId, 
-  "measurementId": FIREBASE_measurementId, 
-  "databaseURL": FIREBASE_databaseURL
-}
-const firebaseApp = initializeApp(firebaseConfig)
-const realTimeDatabase = getDatabase(firebaseApp);
+import * as LiveLocation from './api/live_location';
+import { useFonts } from 'expo-font';
 
 const PassengerStack = createNativeStackNavigator();
 
@@ -50,6 +38,19 @@ const PassengerScreens = (props) => {
                   })}
             />
         
+
+        <PassengerStack.Screen 
+                name="Passenger_ConfirmLocation"
+                component={Passenger_ConfirmLocation} 
+                options = {({ route }) => ({
+                    title: null,
+                    headerLeft: null,
+                    headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
+                    headerStyle: {
+                      borderBottomWidth: 0,
+                    },
+                  })}
+            />
         </PassengerStack.Navigator>
     )
 }
@@ -70,9 +71,9 @@ export const getUserLocation = async (setRegion) => {
         console.log(err)
       })
 }
+
     
 export default function App() {
-
   const [region, setRegion] = useState({
       latitude: 37.78825, 
       longitude: -122.4324 
@@ -81,7 +82,7 @@ export default function App() {
   useEffect(() => { getUserLocation(setRegion)}, [])
 
     return (
-        <NativeBaseProvider>
+        <NativeBaseProvider styles={{fontFamily:'Plus-Jakarta-Sans'}}>
              <NavigationContainer>
                 <PassengerScreens region={region}/>
                 
