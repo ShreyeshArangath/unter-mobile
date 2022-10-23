@@ -13,7 +13,6 @@ import {
 import { Dimensions } from 'react-native';
 import React, { Component, useState } from 'react';
 
-import MapIcon from "../assets/MapsicleMap.jpg"
 import GoogleMap from './google_map';
 import GoogleMapSearch from './google_map_search';
 
