@@ -14,9 +14,12 @@ import {
 import { Dimensions } from 'react-native';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import {GOOGLE_MAPS_API_KEY} from '@env';
+import {GOOGLE_MAPS_API_KEY, FIREBASE_apiKey, FIREBASE_authDomain,
+   FIREBASE_projectId, FIREBASE_storageBucket, FIREBASE_messagingSenderId, FIREBASE_appId, 
+   FIREBASE_measurementId, FIREBASE_databaseURL} from '@env';
+import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
 const baseUrl = 'http://10.172.85.36:9001/api/trips/id/Trip'
-
 
 
 //importing the code for the Other UI's
@@ -27,8 +30,23 @@ import { UsersClass } from './Users/Shared';
 import { UIUser } from './Components/UIUser';
 import { SafeAreaView } from 'react-native';
 import * as Location from 'expo-location';
+import * as LiveLocation from './api/live_location' 
+
+const firebaseConfig = {
+  "apiKey": FIREBASE_apiKey, 
+  "authDomain": FIREBASE_authDomain, 
+  "projectId": FIREBASE_projectId, 
+  "storageBucket": FIREBASE_storageBucket, 
+  "messengerSenderId": FIREBASE_messagingSenderId, 
+  "appId": FIREBASE_appId, 
+  "measurementId": FIREBASE_measurementId, 
+  "databaseURL": FIREBASE_databaseURL
+}
+const firebaseApp = initializeApp(firebaseConfig)
+const realTimeDatabase = getDatabase(firebaseApp);
 
 export default function App() {
+
   const [location, setLocation] = useState(null);
   const [locationErrMsg, setLocationErrMsg] = useState(null);
   //allow us to have a boolean value for what views we are looking at
