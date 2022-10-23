@@ -11,19 +11,22 @@ import { useState } from 'react';
 import { Dimensions } from 'react-native';
 import React, { Component } from 'react';
 
+import { Tripinfo } from '../Components/TripInfo';
+import { TopMenuBar } from '../Components/TopMenuBar';
+import { UserMap } from '../Components/UserMap';
+import { TripButtons } from '../Components/TripButtons';
+import { Instructions } from '../Components/Instructions';
 
-import {UIUser} from './Shared';
 
-
-export const Passenger = (showPass, switchToDriver) => {
+export const Passenger = (props) => {
 
     return (
-        <NativeBaseProvider>
-            <Center flex={1} bg="danger.500">
-                <Button onPress={() =>{showPass.set(false),
-                switchToDriver.set(true)}}>Switch to Driver</Button>
-                <Button onPress={() => showPass.set(false)}>Passenger Return</Button>
-            </Center>
+        <NativeBaseProvider safeArea>
+            <UserMap />
+            <TopMenuBar color={"#B53838"} keepingUser={props.showPass} />
+            <Instructions currentUser={props.showPass.currentUser} />
+            <Tripinfo currentUser={props.showPass.currentUser} />
+            <TripButtons currentUser={props.showPass.currentUser} />
         </NativeBaseProvider>
         );
   }

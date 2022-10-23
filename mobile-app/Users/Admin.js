@@ -11,14 +11,16 @@ import { useState } from 'react';
 import { Dimensions } from 'react-native';
 
 
-import {UIUser} from './Shared';
+import { Tripinfo } from '../Components/TripInfo';
+import { TopMenuBar } from '../Components/TopMenuBar';
+import { UserMap } from '../Components/UserMap';
+import { TripButtons } from '../Components/TripButtons';
+import { Instructions } from '../Components/Instructions';
 
-export const Admin = (showAdmn) => {
+export const Admin = (props) => {
     return (
-        <NativeBaseProvider>
-            <Center flex={1} bg="amber.600">
-                <Button onPress={() => showAdmn.set(false)}>admin Return</Button>
-            </Center>
+        <NativeBaseProvider safeArea>
+            <TopMenuBar color={"#729EA1"} keepingUser={props.showAdmn} />
         </NativeBaseProvider>
         );
   }
