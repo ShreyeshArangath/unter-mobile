@@ -2,7 +2,7 @@ import { HStack, NativeBaseProvider, extendTheme } from "native-base";
 import { NavigationContainer} from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Passenger_Splash, Passenger_PickLocation, LogoTitle, Passenger_ConfirmLocation } from "./Screens/PassengerScreens";
-import { Driver_Splash, Driver_Find_Trip, Driver_ToPassenger} from "./Screens/DriverScreens";
+import { Driver_Splash, Driver_Find_Trip, Driver_ToPassenger, Driver_ToDropOff} from "./Screens/DriverScreens";
 import { TopMenuBar } from "./Components/TopMenuBar";
 import {useState, useEffect} from 'react'
 import * as Location from 'expo-location';
@@ -90,6 +90,19 @@ const DriverScreens = (props) => {
         <NavStack.Screen 
           name="Driver_ToPassenger"
           component={Driver_ToPassenger} 
+          options = {({ route }) => ({
+            title: null,
+            headerLeft: null,
+            headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
+            headerStyle: {
+              borderBottomWidth: 0,
+            },
+          })}
+        />
+
+        <NavStack.Screen 
+          name="Driver_ToDropOff"
+          component={Driver_ToDropOff} 
           options = {({ route }) => ({
             title: null,
             headerLeft: null,
