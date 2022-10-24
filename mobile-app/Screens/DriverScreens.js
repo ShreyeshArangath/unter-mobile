@@ -67,8 +67,8 @@ export const Driver_Find_Trip = ({route, navigation}) => {
             }, 
             "color": "#E5E5E5",
             "region": route.params.region, 
-            "origin": {longitude:33.59360343588962, latitude:-101.87360623629736}, //TODO: Get Current Location
-            "destination": {longitude: 33.59008510344955, latitude:-101.87428390440266} //TODO: GET THIS INFO FROM API REQUEST
+            "origin": {"latitude": 33.58633730000000, "longitude": -101.8747213000000}, //TODO: Get Current Location
+            "destination": {"latitude": 33.59008510344955, "longitude":-101.87428390440266} //TODO: GET THIS INFO FROM API REQUEST
         })
     }
 

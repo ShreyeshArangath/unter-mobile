@@ -9,6 +9,12 @@ import * as Location from 'expo-location';
 import * as LiveLocation from './api/live_location';
 import { useFonts } from 'expo-font';
 
+import {LogBox} from "react-native";
+
+LogBox.ignoreLogs([
+  "EventEmitter.removeListener('appStateDidChange', ...)"
+])
+
 const NavStack = createNativeStackNavigator();
 
 
