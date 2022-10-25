@@ -1,19 +1,83 @@
+const {collection, doc, getDocs, addDoc, deleteDoc, query, where, updateDoc} = require("firebase/firestore")
+
 class UserRepository {
     constructor(firebaseBundle) {
-        this._firebaseBundle = firebaseBundle
+        this._dbz = firebaseBundle.cloudFirestore
     }
 
-    async getUsers() {}
+    async getAllUsers() {
+        const querySnapshot = await getDocs(collection(this._dbz, 'Users'))
+        let jsonUserResult = {}
+        querySnapshot.forEach(doc => {
+            jsonUserResult[doc.id] = doc.data()
+        });
+        return jsonUserResult
+    }
 
-    async getUserWithID(userID) {}
+    async getUserByID(userID) {
+        const querySnapshot = await getDocs(query(collection(this._dbz, 'Users'),
+        where("__name__", "==", userID)))
+        let jsonUserResult = {}
+        querySnapshot.forEach(doc => {
+            jsonUserResult[doc.id] = doc.data()
+        });
+        return jsonUserResult
+    }
 
-    async createUser(User) {}
+    async getUsersByType(userType) {
+        const querySnapshot = await getDocs(query(collection(this._dbz, 'Users'),
+        where("type", "==", userType)))
+        let jsonUserResult = {}
+        querySnapshot.forEach(doc => {
+            jsonUserResult[doc.id] = doc.data()
+        });
+        return jsonUserResult
+    }
 
-    async updateUserRating(userID, newRating) {}
+    async createUser(user) {
+        let newUser = await addDoc(
+            collection(this._dbz, "Users"),
+            user
+        )
+        return user.userID
+    }
 
-    async deleteUser(userID) {}
+    async deleteUser(userID) {
+        if (this._isLogQuery) console.log('Deleting User with userID: ' + userID)
+
+        var response = "Success"
+        await deleteDoc( 
+            doc(collection(this._dbz, 'Users'), userID)
+        )
+        .catch(function(error) {
+            console.log("Remove failed: " + error.message)
+            response = "Failed"
+        });
+        return response
+    }
+
+    async updateUser(userID, paramType, newValue) {
+        if (this._isLogQuery) console.log('Updating User with userID: ' + userID + " field: " + paramType + " to " + newValue)
+
+        var response = "Success"
+        console.log("attempting update in repo")
+        if(true)
+        return await updateDoc(
+            doc( this._dbz, 'Users/'+userID),
+            {
+                paramType : newValue
+            });
+}
 }
 
 module.exports = {
     UserRepository
 }
+
+/*const querySnapshot = await getDocs(query(collection(this._db, 'Trips'),
+where("name", "==", tripID)))
+let jsonResult = {}
+querySnapshot.forEach(doc => {
+jsonResult[doc.id] = doc.data()
+});
+return jsonResult*/
