@@ -56,17 +56,13 @@ class UserRepository {
         return response
     }
 
-    async updateUser(userID, paramType, newValue) {
-        if (this._isLogQuery) console.log('Updating User with userID: ' + userID + " field: " + paramType + " to " + newValue)
+    async updateUser(userID, attributepair) {
+        if (this._isLogQuery) console.log('Updating User with userID: ' + userID + " field: ligma " + attributepair)
 
         var response = "Success"
         console.log("attempting update in repo")
-        if(true)
-        return await updateDoc(
-            doc( this._dbz, 'Users/'+userID),
-            {
-                paramType : newValue
-            });
+        const docRef = doc(this._dbz, 'Users', userID);
+        return await updateDoc(docRef, attributepair);
 }
 }
 

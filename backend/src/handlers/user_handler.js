@@ -116,15 +116,14 @@ function getUserHandler(UserController)
         }
     })
 
-    router.get('/update/:userID&:paramType&:newValue', async function(req, res, next) {
+    router.put('/update/:userID', async function(req, res, next) {
         try {
             const userID = req.params.userID
-            const paramType = req.params.paramType
-            const newValue = req.params.newValue
+            const attributepair = req.body
             console.log("Attempting routing in handler")
             if (userID){
 
-                const data = await UserController.updateUser(userID, paramType, newValue)
+                const data = await UserController.updateUser(userID, attributepair)
                 res.json(data)
             } else {
                 res.status(400)

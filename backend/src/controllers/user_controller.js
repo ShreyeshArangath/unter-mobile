@@ -35,10 +35,10 @@ class UserController
         return await this._userRepository.deleteUser(userID);
     }
 
-    async updateUser(userID, paramType, newValue)
+    async updateUser(userID, attributepair)
     {
         console.log("Controller attempting update")
-        return await this._userRepository.updateUser(userID, paramType, newValue)
+        return await this._userRepository.updateUser(userID, attributepair)
     }
 
 
