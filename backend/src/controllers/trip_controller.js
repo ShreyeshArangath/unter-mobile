@@ -79,7 +79,7 @@ class TripController {
         return await this._tripRepo.deleteTrip(tripID);
     }
 
-    async setUltimateAttr(tripID, attribute_to_change){ 
+    async setUltimateAttr(tripID, attr){ 
         return await this._tripRepo.setUltimateAttr(tripID, attr)
     }
 
