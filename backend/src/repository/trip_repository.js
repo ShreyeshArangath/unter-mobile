@@ -153,7 +153,7 @@ class TripRepository {
         if (this._isLogQuery) console.log('Setting 1+ attributes for Trip: '+ tripID)
 
         return await updateDoc(
-            doc(this._db, 'Trips/'+tripID), attributes)
+            doc(collection(this._db, 'Trips'), tripID), attributes).then(doc=>console.error(attributes));
     }
 }
 
