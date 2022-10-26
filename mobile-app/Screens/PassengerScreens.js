@@ -16,9 +16,10 @@ import { StyleSheet, Image } from 'react-native';
 import { TripButton } from '../Components/TripButton';
 import MapViewDirections from 'react-native-maps-directions';
 import { Marker } from 'react-native-maps';
+import * as api from '../api/api_Calls';
 
 export const Passenger_Splash = ({ navigation, route }) => {
-   
+    const [response, setResponse] = useState({title:"Nothing Yet"})
     return (
         <NativeBaseProvider>
             <Button title="View Past Trips" onPress={() => {
@@ -33,6 +34,17 @@ export const Passenger_Splash = ({ navigation, route }) => {
             }}>
              Next! 
             </Button> 
+
+
+            <Button title="Test Bullshit" onPress={async () => {
+            const data = await api.ChangeTripInfo("tPuE4WLouQhnIY5NOPQ6", {endTime: 5}).then((res) => {
+                console.log(res);
+                return res
+            }).catch(err => { return false;
+            })
+                }} >
+            </Button>
+
         </NativeBaseProvider>
     )
 }
@@ -52,6 +64,7 @@ export const Passenger_PickLocation = ({route, navigation}) => {
             "origin": origin, 
             "destination": destination
         })
+
 
     }
     return (
