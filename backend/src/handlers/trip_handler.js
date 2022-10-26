@@ -322,13 +322,12 @@ function getTripHandler(TripController) {
             const attr = req.body
 
             is_valid_attr = true
-            Object.keys(myObject).forEach(attribute => {
+            Object.keys(attr).forEach(attribute => {
                 if (is_valid_attr) is_valid_attr = DEFAULT_TRIP.hasOwnProperty(attribute)
-                if (is_valid_attr) is_valid_attr = typeof(DEFAULT_TRIP.attribute) == typeof(attribute)
             });
 
             if (tripID && attr && is_valid_attr){
-                const data = await TripController.deleteTrip(tripID)
+                const data = await TripController.setUltimateAttr(tripID, attr)
                 res.json(data)
             } else {
                 res.status(400)

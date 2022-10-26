@@ -153,32 +153,3 @@ export const ChangeTripInfo = (tripID, attr) => {
     })
 }
 
-
-// export async function ChangeTripInfo(TripID)
-// {
-//     const [trip, setTrip] = useState(null)
-//     try {
-//         const response = await fetch(SERVER_URL+'/api/trips/manipulate/'+TripID, {method: 'POST', mode:'cors', 
-//         body:
-//         {
-//             'driverID': origin.driverID, 
-//             'driverRating': origin.driverRating,
-//             'endLoc': origin.endLoc,
-//             'endTime': origin.endTime,
-//             'passID': origin.passID,
-//             'passRating': origin.passRating,
-//             'startLoc': origin.startLoc,
-//             'startTime': origin.startTime,
-//             'status': origin.status
-//         }});
-//         const data = await response.json();
-//         setTrip(data);
-//     }
-//     catch (e) {
-//         console.log(e)
-//     }
-//     return (trip)
-// }
-
-
-
