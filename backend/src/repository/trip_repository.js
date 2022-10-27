@@ -10,17 +10,25 @@ class TripRepository {
         this.failColor = '\x1b[31m%s\x1b[0m';//sets the color to res, then resets the console to normal
     }
 
+    logQueryResult(APIFailed, callingFunction)
+    {
+        if(this._isLogQuery)
+        {
+            if(APIFailed)
+                console.log(this.failColor, "nothing returned, or an error while calling Function: " + callingFunction);
+            else
+                console.log(this.successColor, 'called Function: ' + callingFunction)
+        }
+    }
+
+//-----------------------API CALLS-------------------------------------------------------------
+
     async getTrip(tripID) {
         
         const querySnapshot = await getDocs(query(collection(this._db, 'Trips'),
         where("__name__", "==", tripID)))
         
-        if(querySnapshot.size == 0)
-        {
-            if (this._isLogQuery) console.log(this.failColor, "error trying to retrieve trip with id: " + tripID);
-        }
-        else
-            if (this._isLogQuery) console.info(this.successColor, 'Getting Trip with tripID: ' + tripID)
+        this.logQueryResult(querySnapshot.size==0, "getTrip(" + tripID + ")");
 
         var jsonResult = {}
         querySnapshot.forEach(doc => {
@@ -32,13 +40,8 @@ class TripRepository {
     async getAllTrips() {
         
         const querySnapshot = await getDocs(collection(this._db, 'Trips'));
-        if(querySnapshot.size == 0)
-        {
-            if (this._isLogQuery) console.log(this.failColor, "getting all trips returned empty JSON");
-        }
-        else
-            if (this._isLogQuery) console.info(this.successColor, 'Getting All Trips')
-
+       
+        this.logQueryResult(querySnapshot.size==0, "getAllTrips()");
 
         var jsonResult = {}
         querySnapshot.forEach(doc => {
@@ -52,13 +55,8 @@ class TripRepository {
         const querySnapshot = await getDocs(query(collection(this._db, 'Trips'),
         where("driverID", "==", driverID)))
         
-        if(querySnapshot.size == 0)
-        {
-            if (this._isLogQuery) console.log(this.failColor, "error trying to retrieve trip with driver id: " + driverID);
-        }
-        else
-            if (this._isLogQuery) console.info(this.successColor, 'Getting Trip with driverID: ' + driverID)
-
+        this.logQueryResult(querySnapshot.size==0, "getTripsWithDriverID(" + driverID + ")");
+        
         var jsonResult = {}
         querySnapshot.forEach(doc => {
             jsonResult[doc.id] = doc.data()
@@ -71,13 +69,8 @@ class TripRepository {
         const querySnapshot = await getDocs(query(collection(this._db, 'Trips'),
             where("passID", "==", passID)))
         
-        if(querySnapshot.size == 0)
-        {
-            if (this._isLogQuery) console.log(this.failColor, "error trying to retrieve trip with passenger id: " + driverID);
-        }
-        else
-            if (this._isLogQuery) console.info(this.successColor, 'Getting Trip with passengerID: ' + driverID)
-
+        this.logQueryResult(querySnapshot.size==0, "getTripsWithPassengerID(" + passID + ")");
+            
         var jsonResult = {}
         querySnapshot.forEach(doc => {
             jsonResult[doc.id] = doc.data()
@@ -95,12 +88,7 @@ class TripRepository {
             )
             );
             
-        if(querySnapshot.size == 0)
-        {
-            if (this._isLogQuery) console.log(this.failColor, "longest waiting trip returned nothing");
-        }
-        else
-            if (this._isLogQuery) console.info(this.successColor, 'Getting Longest Waiting Trip')
+        this.logQueryResult(querySnapshot.size==0, "getNextTrip(" + trip_status + ")");
 
         var jsonResult = {}
         querySnapshot.forEach(doc => {
