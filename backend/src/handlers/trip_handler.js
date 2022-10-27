@@ -320,12 +320,12 @@ function getTripHandler(TripController) {
         try {
             const tripID = req.params.tripID
             const attr = req.body
-
             is_valid_attr = true
             Object.keys(attr).forEach(attribute => {
                 if (is_valid_attr) is_valid_attr = DEFAULT_TRIP.hasOwnProperty(attribute)
             });
-
+            
+            console.log(is_valid_attr);
             if (tripID && attr && is_valid_attr){
                 const data = await TripController.setUltimateAttr(tripID, attr)
                 res.json(data)
@@ -334,7 +334,7 @@ function getTripHandler(TripController) {
                 res.send("Check request parameters/body")
             }
         }catch(err) {
-            const errMessage = "Error while deleting trip: " + err.message
+            const errMessage = "Error while Manipulating trip: " + err.message
             res.status(404)
             res.send(errMessage)
             next(err);
