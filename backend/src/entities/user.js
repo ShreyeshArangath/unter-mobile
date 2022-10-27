@@ -1,12 +1,13 @@
 class User {
 
-    user(type, fName, lName, dob, username)
+    user(type, fName, lName, dob, username, rating)
     {
         this.type = type;
         this.fName = fName;
         this.lName = lName;
         this.dob = dob;
         this.username = username;
+        this.rating = rating;
     }
 
     //user methods

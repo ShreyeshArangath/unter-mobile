@@ -10,7 +10,7 @@ function getUserHandler(UserController)
         * @api {get} api/users/id/:userID      Get the information about a particular trip
         * @apiName GetUserByID
         * @apiGroup users
-        * @param userID                  kill me
+        * @param userID                  
         * @apiSuccess {data}                Get info with given userID   
      */
     router.get('/id/:userID', async function(req, res, next) {
@@ -31,14 +31,6 @@ function getUserHandler(UserController)
             next(err);
         }
     })
-
-    /*
-        * @api {get} api/users/id/ligma/balls :userID      Get the information about a particular trip
-        * @apiName GetAllUsers
-        * @apiGroup users
-        * @param none                 kill me
-        * @apiSuccess {data}                Get info with given userID   
-     */
 
     router.get('/all', async function(req, res, next) {
         try {
@@ -78,12 +70,12 @@ function getUserHandler(UserController)
         }
     })
 
-    router.post('/create', async function(req, res, next) {
+    router.post('/create&:username&:password', async function(req, res, next) {
         try {  
-            const user = req.body
+            const userData = req.body
             if (true){
 
-                const data = await UserController.createUser(user)
+                const data = await UserController.createUser(username, password, userData)
                 res.json(data)
             } else {
                 res.status(400)
@@ -131,32 +123,6 @@ function getUserHandler(UserController)
             }
         }catch(err) {
             const errMessage = "Error while updating user: " + err.message
-            res.status(404)
-            res.send(errMessage)
-            next(err);
-        }
-    })
-
-    router.put('/manipulate/:tripID', async function(req, res, next) {
-        try {
-            const tripID = req.params.tripID
-            const attr = req.body
-
-            is_valid_attr = true
-            Object.keys(myObject).forEach(attribute => {
-                if (is_valid_attr) is_valid_attr = DEFAULT_TRIP.hasOwnProperty(attribute)
-                if (is_valid_attr) is_valid_attr = typeof(DEFAULT_TRIP.attribute) == typeof(attribute)
-            });
-
-            if (tripID && attr && is_valid_attr){
-                const data = await TripController.deleteTrip(tripID)
-                res.json(data)
-            } else {
-                res.status(400)
-                res.send("Check request parameters/body")
-            }
-        }catch(err) {
-            const errMessage = "Error while deleting trip: " + err.message
             res.status(404)
             res.send(errMessage)
             next(err);

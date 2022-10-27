@@ -1,4 +1,6 @@
+const { createUserWithEmailAndPassword, signInWithEmailAndPassword } = require("firebase/auth");
 const {collection, doc, getDocs, addDoc, deleteDoc, query, where, updateDoc} = require("firebase/firestore")
+
 
 class UserRepository {
     constructor(firebaseBundle) {
@@ -34,12 +36,44 @@ class UserRepository {
         return jsonUserResult
     }
 
-    async createUser(user) {
+    async createUser(username, password, userData) {
+
+        const auth = getAuth()
+        createUserWithEmailAndPassword(auth, username, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        })
         let newUser = await addDoc(
             collection(this._dbz, "Users"),
-            user
+            userData
         )
-        return user.userID
+        return user
+    }
+
+    async signInUser(username, password) {
+        const auth = getAuth()
+        signInWithEmailAndPassword(auth, username, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+        })
+        .catch((error) => {
+            const errorcode = error.code;
+            const errormessage = error.message;
+        });
+        return user
+    }
+
+    async signOutUser(){
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            // Sign-out successful.
+        }).catch((error) => {
+            // An error happened.
+        });
     }
 
     async deleteUser(userID) {

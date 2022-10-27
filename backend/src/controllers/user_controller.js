@@ -9,6 +9,21 @@ class UserController
     {
         this._userRepository = userRepository
     }
+    
+    async createUser(username, password, userData)
+    {
+        return await this._userRepository.createUser(username, password, userData);
+    }
+
+    async deleteUser(userID)
+    {
+        return await this._userRepository.deleteUser(userID);
+    }
+
+    async authenticateUser(un, pw)
+    {
+
+    }
 
     async getUserByID(userID)
     {
@@ -25,15 +40,6 @@ class UserController
         return await this._userRepository.getAllUsers();
     }
 
-    async createUser(user)
-    {
-        return await this._userRepository.createUser(user);
-    }
-
-    async deleteUser(userID)
-    {
-        return await this._userRepository.deleteUser(userID);
-    }
 
     async updateUser(userID, attributepair)
     {
