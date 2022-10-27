@@ -323,7 +323,6 @@ function getTripHandler(TripController) {
             is_valid_attr = true
             Object.keys(attr).forEach(attribute => {
                 if (is_valid_attr) is_valid_attr = DEFAULT_TRIP.hasOwnProperty(attribute)
-               
             });
             
             console.log(is_valid_attr);
