@@ -8,7 +8,6 @@ export const GetTripByID = (tripId) => {
     console.info("Getting trip ID...");
     return axios.get(URL + "/api/trips/id/"+tripId).then((res) => {
         return (res.data && !Object.keys(res.data).length == 0) ?  res.data : false;
-        return false;
     }).catch(err => {
         console.log(err)
         return false;
