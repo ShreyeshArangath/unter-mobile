@@ -18,7 +18,6 @@ import MapViewDirections from 'react-native-maps-directions';
 import { Marker } from 'react-native-maps';
 
 export const Passenger_Splash = ({ navigation, route }) => {
-   
     return (
         <NativeBaseProvider>
             <Button title="View Past Trips" onPress={() => {
@@ -33,6 +32,7 @@ export const Passenger_Splash = ({ navigation, route }) => {
             }}>
              Next! 
             </Button> 
+
         </NativeBaseProvider>
     )
 }
@@ -52,6 +52,7 @@ export const Passenger_PickLocation = ({route, navigation}) => {
             "origin": origin, 
             "destination": destination
         })
+
 
     }
     return (
