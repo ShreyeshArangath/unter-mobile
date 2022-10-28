@@ -11,11 +11,14 @@ import { TripButton } from '../../Components/TripButton';
 import MapViewDirections from 'react-native-maps-directions';
 import { Marker } from 'react-native-maps';
 import { useState } from 'react';
+import { StartTrip } from '../../api/api_Calls';
 
 export const Passenger_ConfirmLocation = ({route, navigation}) => {
     const [origin, setOrigin] = useState(route.params.origin)
     const [destination, setDestination] = useState(route.params.destination)
     const [duration, setDuration ] = useState(0)  //API returns duration in mins
+    const [tripId, setTripId] = useState("orcaU15HOUYeGLDw0EBS") //TODO: remove the dummy trip id
+    const [debug, setDebug] = useState(true)
 
     const renderMarker = (loc, id) => {
         return <Marker identifier={id} coordinate={{latitude: loc.latitude, longitude: loc.longitude}}/>
@@ -34,16 +37,29 @@ export const Passenger_ConfirmLocation = ({route, navigation}) => {
       />
     }
 
+    const confirmTripInfo = async (passenger) => {
+        if (!debug) {
+            await StartTrip(passenger.id, origin, destination).then((tripId) => {
+                console.log(`The trip id is: ${tripId}`)
+                setTripId(tripId)
+                navigate()
+            }).catch(err => {
+                console.log("something went wrong")
+            })
+        } else {
+            navigate()
+        }
+    }
+
     const navigate = () => {
           //TODO: Navigate to the next screen 
           navigation.push('Passenger_Ride', {
-            "user": {
-                "username": "Shreyesh"
-            }, 
+            "user": route.params.user, 
             "color": "#E5E5E5",
             "region": route.params.region, 
             "origin": origin, 
-            "destination": destination
+            "destination": destination,
+            "tripId": tripId
         })
     }
 
@@ -55,7 +71,7 @@ export const Passenger_ConfirmLocation = ({route, navigation}) => {
                         <Flex alignItems="center" direction="column" >
                             <Instructions header={"Confirm Destination"} 
                             body={`Travel Time: ${duration.toFixed(0)} mins`}/>
-                        <TripButton text={`Confirm Destination`} onPress={navigate}/>
+                        <TripButton text={`Confirm Destination`} onPress={confirmTripInfo}/>
                         </Flex>
                     </Box>
             </ZStack>

@@ -1,7 +1,8 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
+import {API_BASE_URL} from '@env'; 
 
-const URL = "https://356e-68-234-181-23.ngrok.io"
+const URL = API_BASE_URL? API_BASE_URL: "http://localhost:9001"
 
 export const GetTripByID = (tripId) => {
     console.info("Getting trip ID...");

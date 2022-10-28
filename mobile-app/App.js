@@ -8,15 +8,28 @@ import {useState, useEffect} from 'react'
 import * as Location from 'expo-location';
 import * as LiveLocation from './api/live_location';
 import { useFonts } from 'expo-font';
-
+import * as TaskManager from "expo-task-manager"
 import {LogBox} from "react-native";
+import { realTimeDatabase } from "./api/firebase";
+import {updateUserLiveLocationInfo, UnterLocation} from './api/live_location'
 
 LogBox.ignoreLogs([
   "EventEmitter.removeListener('appStateDidChange', ...)"
 ])
 
 const NavStack = createNativeStackNavigator();
+const LOCATION_TASK_NAME = "BACKGROUND_LOCATION_TASK"
+let foregroundSubscription = null
 
+
+const UnterHeaderOptions = ({ route }) => ({
+  title: null,
+  headerLeft: null,
+  headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
+  headerStyle: {
+    borderBottomWidth: 0,
+  },
+})
 
 // TODO: Pass in user context in here 
 const PassengerScreens = (props) => {
@@ -30,46 +43,25 @@ const PassengerScreens = (props) => {
                 name="Splash"
                 component={Passenger_Splash} 
                 options={{title:"Welcome!"}} 
-                initialParams={{"region": props.region}}/>
+                initialParams={{"region": props.region, "position": props.position}}/>
 
             <NavStack.Screen 
                 name="Passenger_PickLocation"
                 component={Passenger_PickLocation} 
-                options = {({ route }) => ({
-                    title: null,
-                    headerLeft: null,
-                    headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
-                    headerStyle: {
-                      borderBottomWidth: 0,
-                    },
-                  })}
+                options = {UnterHeaderOptions}
             />
         
 
         <NavStack.Screen 
                 name="Passenger_ConfirmLocation"
                 component={Passenger_ConfirmLocation} 
-                options = {({ route }) => ({
-                    title: null,
-                    headerLeft: null,
-                    headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
-                    headerStyle: {
-                      borderBottomWidth: 0,
-                    },
-                  })}
+                options = {UnterHeaderOptions}
             />
 
           <NavStack.Screen 
           name="Passenger_Ride"
           component={Passenger_Ride}
-          options = {({ route }) => ({
-            title: null,
-            headerLeft: null,
-            headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
-            headerStyle: {
-              borderBottomWidth: 0,
-            },
-          })}
+          options = {UnterHeaderOptions}
           />
         </NavStack.Navigator>
     )
@@ -118,36 +110,69 @@ const DriverScreens = (props) => {
   )
 }
 
-export const getUserLocation = async (setRegion) => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setLocationErrMsg('Permission to access location was denied');
-      return;
-    }
-    await Location.getCurrentPositionAsync({}).then((location) => {
-        setRegion({
-          latitude: location.coords.latitude, 
-          longitude: location.coords.longitude
-        });
-      }).catch((err) => {
-        console.log(err)
-      })
-}
-
     
 export default function App() {
+  // Define position state: {latitude: number, longitude: number}
+  const [position, setPosition] = useState({
+    latitude: 37.78825, 
+    longitude: -122.4324 
+})
+  const [user, setUser] = useState('shreyesh_test')
   const [region, setRegion] = useState({
       latitude: 33.58447,
       longitude: -101.87469 
   })
 
-  useEffect(() => { getUserLocation(setRegion)}, [])
+   // Request permissions right after starting the app
+  useEffect(() => {
+    const requestPermissions = async () => {
+      const foreground = await Location.requestForegroundPermissionsAsync()
+      if (foreground.granted) await Location.requestBackgroundPermissionsAsync()
+    }
+    requestPermissions()
+  }, [])
+
+
+  useEffect(() => {
+    updateUserLiveLocationInfo(realTimeDatabase, "shreyesh_test", UnterLocation(position.latitude, position.longitude) ) 
+  }, [position])
+   
+  // Start location tracking in foreground
+  const startForegroundUpdate = async () => {
+    // Check if foreground permission is granted
+    const { granted } = await Location.getForegroundPermissionsAsync()
+    if (!granted) {
+      console.log("location tracking denied")
+      return
+    }
+
+    // Make sure that foreground location tracking is not running
+    foregroundSubscription?.remove()
+
+    // Start watching position in real-time
+    foregroundSubscription = await Location.watchPositionAsync(
+      {
+        distanceInterval: 2000,
+        timeInterval: 10000,
+        // For better logs, we set the accuracy to the most sensitive option
+        accuracy: Location.Accuracy.Balanced,
+      },
+      location => {
+        setPosition(location.coords)
+      }
+    )
+  }
+
+    // Stop location tracking in foreground
+    const stopForegroundUpdate = () => {
+      foregroundSubscription?.remove()
+      setPosition(null)
+    }
 
     return (
         <NativeBaseProvider styles={{fontFamily:'Plus-Jakarta-Sans'}}>
              <NavigationContainer>
-              {/* <DriverScreens region={region}/> */}
-              {/* <PassengerScreens region={region}/> */}
+              <PassengerScreens region={region} loc={startForegroundUpdate()} />
             </NavigationContainer>
         </NativeBaseProvider>
       
