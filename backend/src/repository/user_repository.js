@@ -1,4 +1,4 @@
-const { createUserWithEmailAndPassword, signInWithEmailAndPassword } = require("firebase/auth");
+const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } = require("firebase/auth");
 const {collection, doc, getDocs, addDoc, deleteDoc, query, where, updateDoc} = require("firebase/firestore")
 
 
@@ -37,11 +37,12 @@ class UserRepository {
     }
 
     async createUser(username, password, userData) {
-
         const auth = getAuth()
+        var user
         createUserWithEmailAndPassword(auth, username, password)
         .then((userCredential) => {
-            const user = userCredential.user;
+            console.log("Logged In")
+            user = userCredential
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -56,14 +57,17 @@ class UserRepository {
 
     async signInUser(username, password) {
         const auth = getAuth()
+        var user
         signInWithEmailAndPassword(auth, username, password)
         .then((userCredential) => {
-            const user = userCredential.user;
+            console.log("Signing in as " + userCredential.user)
+            user = userCredential
         })
         .catch((error) => {
             const errorcode = error.code;
             const errormessage = error.message;
         });
+        console.log("Signed in as user " + user)
         return user
     }
 
@@ -71,6 +75,7 @@ class UserRepository {
         const auth = getAuth();
         signOut(auth).then(() => {
             // Sign-out successful.
+            console.log("Signed out")
         }).catch((error) => {
             // An error happened.
         });

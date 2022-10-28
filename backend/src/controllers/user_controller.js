@@ -20,9 +20,14 @@ class UserController
         return await this._userRepository.deleteUser(userID);
     }
 
-    async authenticateUser(un, pw)
+    async signInUser(un, pw)
     {
+        return await this._userRepository.signInUser(un,pw);
+    }
 
+    async signOutUser()
+    {
+        return await this._userRepository.signOutUser();
     }
 
     async getUserByID(userID)

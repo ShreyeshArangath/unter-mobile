@@ -70,8 +70,10 @@ function getUserHandler(UserController)
         }
     })
 
-    router.post('/create&:username&:password', async function(req, res, next) {
+    router.post('/create/:username/:password', async function(req, res, next) {
         try {  
+            const username = req.params["username"]
+            const password = req.params["password"]
             const userData = req.body
             if (true){
 
@@ -83,6 +85,44 @@ function getUserHandler(UserController)
             }
         }catch(err) {
             const errMessage = "Error while creating user: " + err.message
+            res.status(404)
+            res.send(errMessage)
+            next(err);
+        }
+    })
+
+    router.get('/signin/:username/:password', async function(req, res, next) {
+        try {  
+            const username = req.params["username"]
+            const password = req.params["password"]
+            if (true){
+
+                const data = await UserController.signInUser(username, password)
+                res.json(data)
+            } else {
+                res.status(400)
+                res.send("Check request parameters/body")
+            }
+        }catch(err) {
+            const errMessage = "Error while signing in: " + err.message
+            res.status(404)
+            res.send(errMessage)
+            next(err);
+        }
+    })
+
+    router.get('/signout', async function(req, res, next) {
+        try {  
+            if (true){
+
+                const data = await UserController.signOutUser()
+                res.json(data)
+            } else {
+                res.status(400)
+                res.send("Check request parameters/body")
+            }
+        }catch(err) {
+            const errMessage = "Error while signing out?: " + err.message
             res.status(404)
             res.send(errMessage)
             next(err);
