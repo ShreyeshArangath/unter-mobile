@@ -1,7 +1,7 @@
 import { HStack, NativeBaseProvider, extendTheme } from "native-base";
 import { NavigationContainer} from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Passenger_Splash, Passenger_PickLocation, LogoTitle, Passenger_ConfirmLocation } from "./Screens/PassengerScreens";
+import { Passenger_Splash, Passenger_PickLocation, LogoTitle, Passenger_ConfirmLocation, Passenger_Ride } from "./Screens/PassengerScreens";
 import { Driver_Splash, Driver_Find_Trip, Driver_ToPassenger, Driver_ToDropOff} from "./Screens/DriverScreens";
 import { TopMenuBar } from "./Components/TopMenuBar";
 import {useState, useEffect} from 'react'
@@ -58,6 +58,19 @@ const PassengerScreens = (props) => {
                     },
                   })}
             />
+
+          <NavStack.Screen 
+          name="Passenger_Ride"
+          component={Passenger_Ride}
+          options = {({ route }) => ({
+            title: null,
+            headerLeft: null,
+            headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
+            headerStyle: {
+              borderBottomWidth: 0,
+            },
+          })}
+          />
         </NavStack.Navigator>
     )
 }
@@ -145,8 +158,8 @@ export default function App() {
     return (
         <NativeBaseProvider styles={{fontFamily:'Plus-Jakarta-Sans'}}>
              <NavigationContainer>
-              <DriverScreens region={region}/>
-                
+              {/* <DriverScreens region={region}/> */}
+              {/* <PassengerScreens region={region}/> */}
             </NavigationContainer>
         </NativeBaseProvider>
       

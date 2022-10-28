@@ -16,6 +16,11 @@ import { StyleSheet, Image } from 'react-native';
 import { TripButton } from '../Components/TripButton';
 import MapViewDirections from 'react-native-maps-directions';
 import { Marker } from 'react-native-maps';
+import { Passenger_Ride } from './Passenger/Passenger_Ride';
+import { Passenger_ConfirmLocation } from './Passenger/Passenger_ConfirmLocation';
+import { Passenger_Splash } from './Passenger/Passenger_Splash';
+import { Passenger_PickLocation } from './Passenger/Passenger_PickLocation';
+
 
 export const Passenger_Splash = ({ navigation, route }) => {
     return (
@@ -103,37 +108,4 @@ export const Passenger_ConfirmLocation = ({route, navigation}) => {
       />
     }
 
-
-    return (
-        <NativeBaseProvider>
-            <ZStack position={"relative"} width="100%" height="100%" >
-                <GoogleMap directions={renderDirection()} originMarker={renderOriginMarker()} destinationMarker={renderDestinationMarker()} />
-                <Box width="100%" marginTop={20}>
-                        <Flex alignItems="center" direction="column" >
-                            <Instructions header={"Confirm Destination"} 
-                            body={`Travel Time: ${duration.toFixed(0)} mins`}/>
-                        <TripButton text={`Confirm Destination`} onPress={() => {}}/>
-                        </Flex>
-                    </Box>
-            </ZStack>
-        </NativeBaseProvider> 
-    );
-}
-
-export const Passenger_LocateRide = ({route, navigation}) => {
-    return (
-        <NativeBaseProvider>
-        
-        <GoogleMap />
-        </NativeBaseProvider>
-    );
-}
-
-export const Passenger_RideFound = ({route, navigation}) => {
-    return (
-        <NativeBaseProvider safeArea>
-        
-        <GoogleMap />
-        </NativeBaseProvider>
-    );
-}
+export {Passenger_Splash, Passenger_PickLocation, Passenger_ConfirmLocation, Passenger_Ride }

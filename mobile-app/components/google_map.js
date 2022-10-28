@@ -1,29 +1,31 @@
-import { NativeBaseProvider } from "native-base"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import MapView, {PROVIDER_GOOGLE} from "react-native-maps"
-import { Marker } from "react-native-maps"
 
 const TexasTechDefaultRegion = {
-    latitude: 33.579166,
-    longitude: -101.886909,
-    latitudeDelta: 0.0922,
+    latitude: 33.5842581,
+    longitude: -101.8870381,
+    latitudeDelta: 0.022,
     longitudeDelta: 0.0421,
 }
 
 export default function GoogleMap(props) {
-    //TODO: Fix marker bug — only one makrer is populated at a time 
-    //TODO: Add logic to change region based on origin and destination 
+    
+    const mapRef = useRef(null)
+    useEffect(() => {
+        if (props.originMarker && props.destinationMarker) mapRef.current.fitToSuppliedMarkers(["origin", "destination"], {edgePadding: {left: 50, right: 50}}, true)
+    }, [])
+
     const [region, setRegion] = useState(TexasTechDefaultRegion)
     
     return (
             <MapView
+            ref={mapRef}
                 style={ styles.map }
                 provider={PROVIDER_GOOGLE}
-                region={region}>
-              {/* {props.origin && <Marker coordinate={{latitude: props.origin.latitude, longitude: props.origin.longitude}} /> }
-              {props.dest && <Marker coordinate={{latitude: props.dest?.latitude, longitude: props.dest?.longitude}} /> } */
-              }
+                followsUserLocation
+                showsUserLocation
+                initialRegion={region}>
               {props.originMarker}
               {props.destinationMarker}
               {props.directions}
