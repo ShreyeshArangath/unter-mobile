@@ -13,9 +13,11 @@ import React, { Component, useState } from 'react';
 //allow us to go to next page of the screen
 export function TripButton(props)
 {
+    const buttonColor = props.disabled ? 'grey' :  "#B53838"
+
     return (
         <Box style={styles.boxStyle}>
-         <Button onPress={props.onPress} style={styles.button}>
+         <Button  backgroundColor={buttonColor} onPress={props.onPress} style={styles.button}>
                 <Text bold style={styles.text}> {props.text} </Text>
             </Button>
         </Box>
@@ -29,7 +31,6 @@ const styles =  StyleSheet.create({
         margin: 5,
     },
     button: {
-        backgroundColor: "#B53838",
         borderRadius: 12,
         padding: 50
     },
