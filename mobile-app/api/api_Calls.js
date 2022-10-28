@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 
-const URL = "https://356e-68-234-181-23.ngrok.io"
+const URL = "http://10.161.11.105:9001"
 
 export const GetTripByID = (tripId) => {
     console.info("Getting trip ID...");
