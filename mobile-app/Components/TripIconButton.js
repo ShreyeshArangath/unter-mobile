@@ -1,26 +1,27 @@
 import {
     Button,
     Text,
-    Center,
     Box,
-    HStack
 } from 'native-base';
-
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import {View, StyleSheet } from 'react-native';
-import React, { Component, useState } from 'react';
+import React from 'react';
 
+export const TripIconButtonType = {
+    Call: 'call-sharp',
+    Emergency: 'alert-sharp'
+}
 
 //allow us to go to next page of the screen
-export function TripButton(props)
+export function TripIconButton(props)
 {
     const buttonColor = props.disabled ? 'grey' :  "#B53838"
 
     return (
         <Box style={styles.boxStyle}>
-            
          <Button  backgroundColor={buttonColor} onPress={props.onPress} style={styles.button}>
-                <Text bold style={styles.text}> {props.text} </Text>
-            </Button>
+                <Ionicons name={props.type} size={20} color={"white"}/>
+        </Button>
         </Box>
        
     )
@@ -28,7 +29,8 @@ export function TripButton(props)
 
 const styles =  StyleSheet.create({
     boxStyle: {
-        width: '90%',
+        width: 50,
+        height: 50,
         margin: 5,
     },
     button: {
