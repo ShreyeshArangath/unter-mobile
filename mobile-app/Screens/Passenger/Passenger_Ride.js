@@ -4,6 +4,7 @@ import {
     NativeBaseProvider,
     ZStack, 
     Flex,
+    HStack,
 } from 'native-base';
 import { Instructions } from '../../Components/Instructions';
 import {GOOGLE_MAPS_API_KEY} from '@env';
@@ -12,6 +13,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import { Marker } from 'react-native-maps';
 import { useState } from 'react';
 import { VehicleCard } from '../../Components/VehicleCard';
+import { TripIconButton, TripIconButtonType } from '../../Components/TripIconButton';
 
 export const Passenger_Ride = ({route, navigation}) => {
     const [origin, setOrigin] = useState(route.params.origin)
@@ -47,6 +49,24 @@ export const Passenger_Ride = ({route, navigation}) => {
     )
     }
 
+    const rideFound = () => {
+        return (
+            <Flex alignItems="center" direction="column" >
+                <Instructions header={"Ride Found"} 
+                            body={`Hang tight - we’ll be there shortly.`}/>
+                <VehicleCard header={"Unter Van"} found={true} extraInfo={"Dara's coming to pick you up"}/>
+                <Flex direction="row">
+                    <HStack width={"50%"}>
+                        <TripButton text={"Change Location"} onPress={() => {}}/>
+                    </HStack>
+                    <HStack>
+                        <TripIconButton type={TripIconButtonType.Call} onPress={() => {}}/>
+                        <TripIconButton type={TripIconButtonType.Emergency} onPress={() => {}}/>
+                    </HStack>
+                </Flex>
+            </Flex>   
+        )
+    }
 
     return (
         <NativeBaseProvider>
@@ -54,6 +74,7 @@ export const Passenger_Ride = ({route, navigation}) => {
                 <GoogleMap directions={renderDirection()} originMarker={renderMarker(origin, "origin")} destinationMarker={renderMarker(destination, "destination")} />
                 <Box width="100%" marginTop={20}>
                         {!foundDriver && findingARide()}
+                        {foundDriver && rideFound()}
                  </Box>
             </ZStack>
         </NativeBaseProvider>

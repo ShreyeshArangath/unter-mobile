@@ -2,12 +2,16 @@ import { Box, HStack, VStack, Text, Flex } from "native-base";
 import {Image, StyleSheet} from 'react-native'
 
 export function VehicleCard(props) {
-    const carImage = require('../assets/among_us_blue.png')
+    //TODO: Replace it with better images
+    const findingDriver = require('../assets/among_us_blue.png')
+    const foundDriver = require('../assets/among_us_red.png')
+    const vehicleCardImage = props.found ? foundDriver : findingDriver
+
     return (
         <Box style={styles.boxStyle}>
             <HStack>
             <Image
-                source={require('../assets/among_us_blue.png')}
+                source={vehicleCardImage}
                 style={styles.imageStyle}
              />
                 <VStack style={styles.descriptionBox}>
@@ -34,7 +38,7 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     imageStyle: {
-        width: 35, 
+        width: 25, 
         height: 35,
         margin: 10,
     },
