@@ -102,7 +102,7 @@ class TripRepository {
 
         var newTrip = await addDoc(
             collection(this._db, 'Trips'),
-            starting_trip
+            startingTripInfo
         )
         return newTrip.id
     }

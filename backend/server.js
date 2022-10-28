@@ -10,9 +10,6 @@ const bodyParser = require('body-parser');
  */
 const PORT = process.env.UNTER_BACKEND_PORT || 9000
 
-// mongo 
-const MONGO_DB_NAME = process.env.MONGO_DB_NAME;
-const MONGO_URI = process.env.MONGO_URI;
 
 // firebase 
 const FirebaseConfig = {
@@ -31,9 +28,6 @@ const FirebaseConfig = {
  */
 
 // DB
-const {
-    GetMongoClient
-} = require('./src/shared/mongo_helper')
 
 // Controllers 
 const { TripController } = require('./src/controllers/trip_controller');
@@ -43,9 +37,6 @@ const {UserRepository} = require('./src/repository/user_repository');
 const { FirebaseBundle } = require('./src/shared/firebase_helper');
 const { TripRepository } = require('./src/repository/trip_repository');
 
-
-
-const mongoClient = GetMongoClient(MONGO_URI, MONGO_DB_NAME);
 const firebaseBundle = new FirebaseBundle(FirebaseConfig);
 
 /**
