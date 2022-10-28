@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 
-const URL = "http://10.161.172.119:9001"
+const URL = "https://356e-68-234-181-23.ngrok.io"
 
 export const GetTripByID = (tripId) => {
     console.info("Getting trip ID...");
@@ -9,23 +9,28 @@ export const GetTripByID = (tripId) => {
         if (res.data != null) return res.data;
         return false;
     }).catch(err => {
+        console.log(err)
         return false;
     })
 }
 
 export const GetNextTripInfo = () => {
     console.info("Getting next trip info...");
-    return axios.get(URL+ "/api/trips/ride/next/").then((res) => {
-        if (res.data != null) return res.data;
-        return false;
-    }).catch(err => {
-        return false;
-    })
+    return axios.get(URL+ "/api/trips/ride/next/")
+        .then(res => {
+            return (res.data != null) ?  res.data : false;
+        }).catch(err => {
+            throw {
+                code: err.code,
+                message: err.message,
+                responseStatus: err.response?.status,
+            };
+        })
 }
 
 export const StartTrip = (passengerID, origin) => {
     console.info("Starting a trip...");
-    return axios.get(URL+ "/api/trips/ride/start/"+passengerID, {'latitude': origin.latitude, 'longitude': origin.longitude}).then((res) => {
+    return axios.post(URL+ "/api/trips/ride/start/", {'passengerID': passengerID, 'latitude': origin.latitude, 'longitude': origin.longitude}).then((res) => {
         if (res.data != null) return res.data;
         return false;
     }).catch(err => {
@@ -36,7 +41,6 @@ export const StartTrip = (passengerID, origin) => {
 export const AssignDriver = (tripID, driverID) => {
     console.info("Assigning a driver...");
     return axios.put(URL+ "/api/trips/ride/set_driver/"+tripID+"&"+driverID).then((res) => {
-        console.log(res.status);
         if (res.status == 200) return true;
         return false;
     }).catch(err => {
@@ -48,7 +52,6 @@ export const AssignDriver = (tripID, driverID) => {
 export const UpdateTripStatus = (tripID, status) => {
     console.info("Updating trip status...");
     return axios.put(URL+ "/api/trips/ride/update_status/"+tripID+"&"+status).then((res) => {
-        console.log(res.status);
         if (res.status == 200) return true;
         return false;
     }).catch(err => {
@@ -57,10 +60,9 @@ export const UpdateTripStatus = (tripID, status) => {
     })
 }
 
-export const CompleteTrip = (tripID, origin) => {
+export const CompleteTrip = (tripID) => {
     console.info("Completing trip...");
-    return axios.put(URL+ "/api/trips/ride/end/"+tripID, {'latitude': origin.latitude, 'longitude': origin.longitude}).then((res) => {
-        console.log(res.status);
+    return axios.put(URL+ "/api/trips/ride/end/"+tripID).then((res) => {
         if (res.status == 200) return true;
         return false;
     }).catch(err => {
@@ -72,7 +74,6 @@ export const CompleteTrip = (tripID, origin) => {
 export const GetAllTrips = () => {
     console.info("Getting all trips...");
     return axios.get(URL+ "/api/trips/all/").then((res) => {
-        console.log(res.status);
         if (res.data != null) return res.data;
         return false;
     }).catch(err => {
