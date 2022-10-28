@@ -119,25 +119,25 @@ function getTripHandler(TripController) {
     })
 
     /**
-        * @api {post} api/trips/ride/start/:passengerID           Start a trip with passenger
+        * @api {post} api/trips/ride/start/           Start a trip with passenger
         * @apiName StartTrip
         * @apiGroup Trip
-        * @apiBody  GeoLocation                             GeoLocation of the start trip in JSON format 
+        * @apiBody  {passengerID: x, latitude: x, longitude: y}                             GeoLocation of the start trip in JSON format 
         * The latitude of this GeoPoint in the range [-90, 90].
         * The longitude of this GeoPoint in the range [-180, 180].
         * @apiSuccess {data}                                tripID
     */
-    router.post('/ride/start/:passengerID', async function(req, res, next) {
+    router.post('/ride/start', async function(req, res, next) {
         try {
-            const passengerID = req.params.passengerID
-            const startLocation = req.body
+            const startingTripInfo = req.body
         
             if ( 
-                passengerID && startLocation.hasOwnProperty('latitude') && startLocation.hasOwnProperty('longitude') &&
-                startLocation.latitude >= -90 && startLocation.latitude <= 90 &&
-                startLocation.longitude >= -180 && startLocation.longitude <= 180
+                startingTripInfo.hasOwnProperty('passengerID') && startingTripInfo.passengerID &&
+                startingTripInfo.hasOwnProperty('latitude') && startingTripInfo.hasOwnProperty('longitude') &&
+                startingTripInfo.latitude >= -90 && startingTripInfo.latitude <= 90 &&
+                startingTripInfo.longitude >= -180 && startingTripInfo.longitude <= 180
             ){
-                const data = await TripController.createTrip(passengerID, startLocation)//replace this body geo location
+                const data = await TripController.createTrip(startingTripInfo)//replace this body geo location
                 res.json(data)
             } else {
                 res.status(400)
@@ -211,14 +211,9 @@ function getTripHandler(TripController) {
     router.put('/ride/end/:tripID', async function(req, res, next) {
         try {
             const tripID = req.params.tripID
-            const endLocation = req.body
 
-            if (
-                tripID && endLocation.hasOwnProperty('latitude') && endLocation.hasOwnProperty('longitude') &&
-                endLocation.latitude >= -90 && endLocation.latitude <= 90 &&
-                endLocation.longitude >= -180 && endLocation.longitude <= 180
-            ) {
-                const data = await TripController.updateTripStatus(tripID, endLocation)
+            if ( tripID ) {
+                const data = await TripController.updateTripStatus(tripID)
                 res.json(data)
             } else {
                 res.status(400)
@@ -323,7 +318,6 @@ function getTripHandler(TripController) {
             is_valid_attr = true
             Object.keys(attr).forEach(attribute => {
                 if (is_valid_attr) is_valid_attr = DEFAULT_TRIP.hasOwnProperty(attribute)
-               
             });
             
             console.log(is_valid_attr);

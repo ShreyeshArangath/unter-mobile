@@ -1,8 +1,8 @@
 import { HStack, NativeBaseProvider, extendTheme } from "native-base";
 import { NavigationContainer} from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Passenger_Splash, Passenger_PickLocation, LogoTitle, Passenger_ConfirmLocation } from "./Screens/PassengerScreens";
-import { Driver_Splash, Driver_Find_Trip, Driver_ToPassenger, Driver_ToDropOff} from "./Screens/DriverScreens";
+import { Passenger_Splash, Passenger_PickLocation, LogoTitle, Passenger_ConfirmLocation, Passenger_Ride } from "./Screens/PassengerScreens";
+import { Driver_Splash, Driver_Finding_Trip, Driver_Mapping} from "./Screens/DriverScreens";
 import { TopMenuBar } from "./Components/TopMenuBar";
 import {useState, useEffect} from 'react'
 import * as Location from 'expo-location';
@@ -58,6 +58,19 @@ const PassengerScreens = (props) => {
                     },
                   })}
             />
+
+          <NavStack.Screen 
+          name="Passenger_Ride"
+          component={Passenger_Ride}
+          options = {({ route }) => ({
+            title: null,
+            headerLeft: null,
+            headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
+            headerStyle: {
+              borderBottomWidth: 0,
+            },
+          })}
+          />
         </NavStack.Navigator>
     )
 }
@@ -78,8 +91,8 @@ const DriverScreens = (props) => {
         />
 
         <NavStack.Screen 
-          name="Driver_Find_Trip"
-          component={Driver_Find_Trip} 
+          name="Driver_Finding_Trip"
+          component={Driver_Finding_Trip} 
           options={{
             title: null, 
             headerTransparent: true, 
@@ -88,29 +101,17 @@ const DriverScreens = (props) => {
         />
 
         <NavStack.Screen 
-          name="Driver_ToPassenger"
-          component={Driver_ToPassenger} 
+          name="Driver_Mapping"
+          component={Driver_Mapping} 
           options = {({ route }) => ({
             title: null,
             headerLeft: null,
             headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
             headerStyle: {
               borderBottomWidth: 0,
-            },
-          })}
-        />
-
-        <NavStack.Screen 
-          name="Driver_ToDropOff"
-          component={Driver_ToDropOff} 
-          options = {({ route }) => ({
-            title: null,
-            headerLeft: null,
-            headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
-            headerStyle: {
-              borderBottomWidth: 0,
-            },
-          })}
+            }
+            })}
+          initialParams={{"region": props.region}}
         />
       
       </NavStack.Navigator>
@@ -136,8 +137,8 @@ export const getUserLocation = async (setRegion) => {
     
 export default function App() {
   const [region, setRegion] = useState({
-      latitude: 37.78825, 
-      longitude: -122.4324 
+      latitude: 33.58447,
+      longitude: -101.87469 
   })
 
   useEffect(() => { getUserLocation(setRegion)}, [])
@@ -145,8 +146,8 @@ export default function App() {
     return (
         <NativeBaseProvider styles={{fontFamily:'Plus-Jakarta-Sans'}}>
              <NavigationContainer>
-              <DriverScreens region={region}/>
-                
+              {/* <DriverScreens region={region}/> */}
+              {/* <PassengerScreens region={region}/> */}
             </NavigationContainer>
         </NativeBaseProvider>
       
