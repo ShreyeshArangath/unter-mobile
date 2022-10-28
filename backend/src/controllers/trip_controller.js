@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {GeoPoint} = require("firebase/firestore")
+const { GeoPoint, Timestamp } = require("firebase/firestore")
 const { TRIP_STATUS } = require('../shared/definitions')
 
 class TripController {
@@ -33,19 +33,19 @@ class TripController {
         return result
     }
 
-    async createTrip(passID, startLocation){
-        const DEFAULT_TRIP_START = {
+    async createTrip(startingTripInfo){
+        const parsedTripInfo = {
             'driverID' : 'NULL',
             'driverRating' : -1,
-            'endLoc' : new GeoPoint(startLocation.latitude, startLocation.longitude), // change to an address?
+            'endLoc' : new GeoPoint(startingTripInfo.latitude, startingTripInfo.longitude), // change to an address?
             'endTime' : 0,
-            'passID' : passID,
+            'passID' : startingTripInfo.passengerID,
             'passRating' : -1,
-            'startLoc' : new GeoPoint(startLocation.latitude, startLocation.longitude), // change to an address?
-            'startTime' : new Date().toLocaleString(),
+            'startLoc' : new GeoPoint(startingTripInfo.latitude, startingTripInfo.longitude), // change to an address?
+            'startTime' : new Date(),
             'status' : TRIP_STATUS.in_queue
         }
-        var newTripID = await this._tripRepo.createTrip(passID, DEFAULT_TRIP_START);
+        var newTripID = await this._tripRepo.createTrip(parsedTripInfo);
         return newTripID
     }
 
@@ -60,8 +60,7 @@ class TripController {
     async endTrip(tripID, endLocation){  
 
         const att_updating = {
-            'endLoc' : endLocation,
-            'endTime' : new Date().toLocaleString(),
+            'endTime' : new Date(),
             'status' : 'completed'
         }
         return await this._tripRepo.endTrip(tripID, att_updating)
