@@ -18,6 +18,7 @@ import { TripIconButton, TripIconButtonType } from '../../Components/TripIconBut
 import { doc, onSnapshot } from "firebase/firestore";
 import { fireStore, realTimeDatabase } from "../../api/firebase";
 import { off, onValue, ref } from 'firebase/database';
+import { LocationProvider } from '../../LocationProvider';
 
 
 export const Passenger_Ride = ({route, navigation}) => {
@@ -105,19 +106,21 @@ export const Passenger_Ride = ({route, navigation}) => {
     const rideFound = () => {
         return (
             <Flex alignItems="center" direction="column" >
-                <Instructions header={"Ride Found"} 
-                            body={`Hang tight - we’ll be there shortly.`}/>
-                <VehicleCard header={"Unter Van"} found={true} extraInfo={`Dara's coming to pick you up`}/>
-                <Flex direction="row">
-                    <HStack width={"50%"}>
-                        <TripButton text={"Change Location"} onPress={() => {}}/>
-                    </HStack>
-                    <HStack>
-                        <TripIconButton type={TripIconButtonType.Call} onPress={() => {}}/>
-                        <TripIconButton type={TripIconButtonType.Emergency} onPress={() => {}}/>
-           
-                    </HStack>
-                </Flex>
+                <LocationProvider name={'shreyesh_test'}>
+                    <Instructions header={"Ride Found"} 
+                                body={`Hang tight - we’ll be there shortly.`}/>
+                    <VehicleCard header={"Unter Van"} found={true} extraInfo={`Dara's coming to pick you up`}/>
+                    <Flex direction="row">
+                        <HStack width={"50%"}>
+                            <TripButton text={"Change Location"} onPress={() => {}}/>
+                        </HStack>
+                        <HStack>
+                            <TripIconButton type={TripIconButtonType.Call} onPress={() => {}}/>
+                            <TripIconButton type={TripIconButtonType.Emergency} onPress={() => {}}/>
+            
+                        </HStack>
+                    </Flex>
+                </LocationProvider>
             </Flex>   
         )
     }

@@ -11,18 +11,18 @@ export function LocationProvider(props) {
     const [location, setLocation] = useState(null);
 
     const watchLocation = async () => {
-        let {status} = await Location.requestPermissionsAsync();
+        let {status} = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
             console.log('Permission to access location was denied');
             return;
         }
 
         await Location.watchPositionAsync({
-            distanceInterval: 4,
-            requiredAccuracy: Accuracy.Highest
+            distanceInterval: 200,
+            requiredAccuracy: Accuracy.Balanced
         }, (location)=>{
             setLocation(location)
-            updateUserLiveLocationInfo(realTimeDatabase, props.name, UnterLocation(location.coords.latitude, location.coords.longitude))
+            setTimeout(updateUserLiveLocationInfo(realTimeDatabase, props.name, UnterLocation(location.coords.latitude, location.coords.longitude)), 10000)    
         });
     }
 

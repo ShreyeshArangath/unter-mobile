@@ -1,6 +1,6 @@
-import { HStack, NativeBaseProvider, extendTheme, Button, KeyboardAvoidingView, Container } from "native-base";
+import { HStack, NativeBaseProvider, extendTheme, Button, KeyboardAvoidingView, Container, Box, Center } from "native-base";
 import { NavigationContainer} from "@react-navigation/native";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { Passenger_Splash, Passenger_PickLocation, LogoTitle, Passenger_ConfirmLocation, Passenger_Ride } from "./Screens/PassengerScreens";
 import { Driver_Splash, Driver_Finding_Trip, Driver_Mapping} from "./Screens/DriverScreens";
 import { TopMenuBar } from "./Components/TopMenuBar";
@@ -10,18 +10,18 @@ import {LogBox} from "react-native";
 import { realTimeDatabase } from "./api/firebase";
 import {updateUserLiveLocationInfo, UnterLocation} from './api/live_location'
 import {LocationProvider} from "./LocationProvider";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 
 LogBox.ignoreLogs([
   "EventEmitter.removeListener('appStateDidChange', ...)"
 ])
 
-const NavStack = createNativeStackNavigator();
+const HomeStack = createStackNavigator();
+const DriverStack = createStackNavigator();
+const PassengerStack = createStackNavigator();
 
 const UnterHeaderOptions = ({ route }) => ({
   title: null,
-  headerLeft: null,
   headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
   headerStyle: {
     borderBottomWidth: 0,
@@ -29,68 +29,68 @@ const UnterHeaderOptions = ({ route }) => ({
 })
 
 // TODO: Pass in user context in here 
-const PassengerScreens = (props) => {
+const PassengerScreens = ({route, navigation}) => {
     return (
-    <NavStack.Navigator  
+    <PassengerStack.Navigator  
         screenOptions={{
-            headerBackTitleVisible: false
+            headerBackTitleVisible: false,
+            headerMode: 'float'
           }}>
             
-            <NavStack.Screen 
+            <PassengerStack.Screen 
                 name="Splash"
                 component={Passenger_Splash} 
                 options={{title:"Welcome!"}} 
-                initialParams={{"region": props.region, "position": props.position}}/>
+                initialParams={{"region": route.params.region, "position": route.params.position}}/>
 
-            <NavStack.Screen 
+            <PassengerStack.Screen 
                 name="Passenger_PickLocation"
                 component={Passenger_PickLocation} 
                 options = {UnterHeaderOptions}
             />
         
 
-        <NavStack.Screen 
+        <PassengerStack.Screen 
                 name="Passenger_ConfirmLocation"
                 component={Passenger_ConfirmLocation} 
                 options = {UnterHeaderOptions}
             />
 
-          <NavStack.Screen 
-          name="Passenger_Ride"
-          component={Passenger_Ride}
-          options = {UnterHeaderOptions}
+        <PassengerStack.Screen 
+                  name="Passenger_Ride"
+                  component={Passenger_Ride}
+                  options = {UnterHeaderOptions}
           />
-        </NavStack.Navigator>
+        </PassengerStack.Navigator>
     )
 }
 
 // TODO: Pass in trip & user context in here 
-const DriverScreens = (props) => {
+const DriverScreens = ({route, navigation}) => {
   return (
-
-        <NavStack.Navigator  
+        <DriverStack.Navigator 
               screenOptions={{
                   headerBackTitleVisible: false
                 }}>
 
-                <NavStack.Screen 
+                <DriverStack.Screen 
                   name="Driver_Splash"
                   component={Driver_Splash} 
                   options={{title: null, headerTransparent: true}} 
-                  initialParams={{"region": props.region}}
+                  initialParams={{"region": route.params.region}}
                 />
 
-                <NavStack.Screen 
+                <DriverStack.Screen 
                   name="Driver_Finding_Trip"
                   component={Driver_Finding_Trip} 
                   options={{
                     title: null, 
                     headerTransparent: true, 
                     headerBackVisible: true}} 
-                  initialParams={{"region": props.region}}
+                  initialParams={{"region": route.params.region}}
                 />
 
-                <NavStack.Screen 
+                <DriverStack.Screen 
                   name="Driver_Mapping"
                   component={Driver_Mapping} 
                   options = {({ route }) => ({
@@ -101,13 +101,46 @@ const DriverScreens = (props) => {
                       borderBottomWidth: 0,
                     }
                     })}
-                  initialParams={{"region": props.region}}
+                  initialParams={{"region": route.params.region}}
                 />
-              </NavStack.Navigator>
-  
+              </DriverStack.Navigator>
   )
 }
-    
+  
+const Unter = ({route, navigation}) => {
+  const handleOnPress = (type) => {
+    navigation.navigate(type, {
+      "region": route.params.region
+    })  
+  }
+
+  return (
+    <NativeBaseProvider>
+      <Center marginTop={"50%"}>
+        <Box>
+          <Button onPress={() => handleOnPress("Passenger")}>Passenger</Button>
+          <Button onPress={() => handleOnPress("Driver")}>Driver</Button>
+          <Button>Admin</Button>
+        </Box>
+      </Center>
+    </NativeBaseProvider>
+  )
+}
+
+const HomeNavigation = (props) => {
+  return (
+    <HomeStack.Navigator screenOptions={{
+      headerBackTitleVisible: false,
+      headerShown: false
+    }} >
+      <HomeStack.Screen  name="Unter" component={Unter} initialParams={{region: props.region}}/>
+      <HomeStack.Screen name="Passenger" component={PassengerScreens} initialParams={{region: props.region, position: props.position}} />
+      <HomeStack.Screen name="Driver" component={DriverScreens} initialParams={{region: props.region}} />
+    </HomeStack.Navigator>
+  )
+}
+
+
 export default function App() {
   // Define position state: {latitude: number, longitude: number}
   const [position, setPosition] = useState({
@@ -129,51 +162,11 @@ export default function App() {
     requestPermissions()
   }, [])
 
-
-  // useEffect(() => {
-  //   updateUserLiveLocationInfo(realTimeDatabase, "shreyesh_test", UnterLocation(position.latitude, position.longitude) ) 
-  // }, [position])
-   
-  // Start location tracking in foreground
-  const startForegroundUpdate = async () => {
-    // Check if foreground permission is granted
-    const { granted } = await Location.getForegroundPermissionsAsync()
-    if (!granted) {
-      console.log("location tracking denied")
-      return
-    }
-
-    // Make sure that foreground location tracking is not running
-    foregroundSubscription?.remove()
-
-    // Start watching position in real-time
-    foregroundSubscription = await Location.watchPositionAsync(
-      {
-        distanceInterval: 2000,
-        timeInterval: 10000,
-        // For better logs, we set the accuracy to the most sensitive option
-        accuracy: Location.Accuracy.Balanced,
-      },
-      location => {
-        setPosition(location.coords)
-      }
-    )
-  }
-
-    // Stop location tracking in foreground
-    const stopForegroundUpdate = () => {
-      foregroundSubscription?.remove()
-      setPosition(null)
-    }
-
     return (
-      
         <NativeBaseProvider styles={{fontFamily:'Plus-Jakarta-Sans' }}>
-          <LocationProvider name={"shreyesh_test"}>
             <NavigationContainer>
-              <PassengerScreens region={region}/>
+              <HomeNavigation region={region} position={position}/>
             </NavigationContainer>
-          </LocationProvider>
         </NativeBaseProvider>   
          
     )
