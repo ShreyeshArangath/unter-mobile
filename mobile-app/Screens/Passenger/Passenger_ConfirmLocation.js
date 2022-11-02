@@ -17,7 +17,7 @@ export const Passenger_ConfirmLocation = ({route, navigation}) => {
     const [origin, setOrigin] = useState(route.params.origin)
     const [destination, setDestination] = useState(route.params.destination)
     const [duration, setDuration ] = useState(0)  //API returns duration in mins
-    const [tripId, setTripId] = useState("orcaU15HOUYeGLDw0EBS") //TODO: remove the dummy trip id
+    const [tripId, setTripId] = useState("VgcSzGAEYBFLgeHPXOpG") //TODO: remove the dummy trip id
     const [debug, setDebug] = useState(true)
 
     const renderMarker = (loc, id) => {
@@ -38,17 +38,8 @@ export const Passenger_ConfirmLocation = ({route, navigation}) => {
     }
 
     const confirmTripInfo = async (passenger) => {
-        if (!debug) {
-            await StartTrip(passenger.id, origin, destination).then((tripId) => {
-                console.log(`The trip id is: ${tripId}`)
-                setTripId(tripId)
-                navigate()
-            }).catch(err => {
-                console.log("something went wrong")
-            })
-        } else {
-            navigate()
-        }
+        //TODO:API-CALL Start the trip update states tripId 
+        navigate()
     }
 
     const navigate = () => {

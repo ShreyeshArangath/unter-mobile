@@ -18,7 +18,7 @@ import { TripIconButton, TripIconButtonType } from '../../Components/TripIconBut
 import { doc, onSnapshot } from "firebase/firestore";
 import { fireStore, realTimeDatabase } from "../../api/firebase";
 import { off, onValue, ref } from 'firebase/database';
-import { LocationProvider } from '../../LocationProvider';
+import {LocationProvider} from '../../LocationProvider';
 
 
 export const Passenger_Ride = ({route, navigation}) => {
@@ -26,9 +26,9 @@ export const Passenger_Ride = ({route, navigation}) => {
     const [destination, setDestination] = useState(route.params.destination)
     const [duration, setDuration ] = useState(0)  //API returns duration in mins
     const [foundDriver, setFoundDriver] = useState(false)
-    const [driverId, setDriverId] = useState(null)
+    const [driverId, setDriverId] = useState('shreyesh_test')
     const [tripId, setTripId] = useState(route.params.tripId)
-    const [driverLoc, setDriverLoc] = useState({latitude: 33.5842581, longitude: -101.8870381})
+    const [driverLoc, setDriverLoc] = useState(null)
 
     // Check firestore to see if we have a driver for the given trip
     useEffect(() => {
@@ -37,6 +37,7 @@ export const Passenger_Ride = ({route, navigation}) => {
             const tripInfo = res.data()
             if(tripInfo["driverID"] != "NULL"){
                 setDriverId(tripInfo["driverID"])
+                //TODO:API-CALL Add API calls to get the driver name from the driver id
                 setFoundDriver(true)
             } else {
                 setFoundDriver(false)
@@ -64,15 +65,17 @@ export const Passenger_Ride = ({route, navigation}) => {
     }, [driverId, driverLoc])
     //TODO: resize on zoom
     const renderDriverMarker = (loc, id) => {
-        return(
-            <Marker identifier={id} coordinate={{latitude: loc.latitude, longitude: loc.longitude}}> 
-                <Image
-                    source={require('../../assets/among_us_red.png')}
-                    style={{width: 25, height: 35}}
-                    resizeMode="resize"
-                />
-            </Marker>
-        ) 
+        if(loc){
+            return(
+                <Marker identifier={id} coordinate={{latitude: loc.latitude, longitude: loc.longitude}}> 
+                    <Image
+                        source={require('../../assets/among_us_red.png')}
+                        style={{width: 25, height: 35}}
+                        resizeMode="resize"
+                    />
+                </Marker>
+            ) 
+        }
     }
 
     const renderMarker = (loc, id) => {
@@ -98,18 +101,18 @@ export const Passenger_Ride = ({route, navigation}) => {
                 <Instructions header={"Locating Rides"} 
                             body={`Finding the closest rides near you.`}/>
                 <VehicleCard header={"Unter Van"} extraInfo={"Average Wait Time"}/>
-                <TripButton text={"Finding a Ride ..."} disabled={true} onPress={() => {}}/>
+                <TripButton text={"Finding a Ride ..."} color={"grey"} onPress={() => {}}/>
             </Flex>   
         )
     }
 
     const rideFound = () => {
+        
         return (
             <Flex alignItems="center" direction="column" >
-                <LocationProvider name={'shreyesh_test'}>
                     <Instructions header={"Ride Found"} 
                                 body={`Hang tight - we’ll be there shortly.`}/>
-                    <VehicleCard header={"Unter Van"} found={true} extraInfo={`Dara's coming to pick you up`}/>
+                    <VehicleCard header={"Unter Van"} found={true} extraInfo={`${driverId} coming to pick you up`}/> 
                     <Flex direction="row">
                         <HStack width={"50%"}>
                             <TripButton text={"Change Location"} onPress={() => {}}/>
@@ -120,7 +123,6 @@ export const Passenger_Ride = ({route, navigation}) => {
             
                         </HStack>
                     </Flex>
-                </LocationProvider>
             </Flex>   
         )
     }
@@ -128,7 +130,12 @@ export const Passenger_Ride = ({route, navigation}) => {
     return (
         <NativeBaseProvider>
           <ZStack position={"relative"} width="100%" height="100%" >
-                <GoogleMap directions={renderDirection()} originMarker={renderMarker(origin, "origin")} destinationMarker={renderMarker(destination, "destination")} driverMarker={renderDriverMarker(driverLoc, "driver")}/>
+                <GoogleMap 
+                directions={renderDirection()}
+                originMarker={renderMarker(origin, "origin")} 
+                destinationMarker={renderMarker(destination, "destination")} 
+                driverMarker={renderDriverMarker(driverLoc, "driver")}
+                />
                 <Box width="100%" marginTop={20}>
                         {!foundDriver && findingARide()}
                         {foundDriver && rideFound()}

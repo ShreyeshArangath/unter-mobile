@@ -7,10 +7,7 @@ import { TopMenuBar } from "./Components/TopMenuBar";
 import {useState, useEffect} from 'react'
 import * as Location from 'expo-location';
 import {LogBox} from "react-native";
-import { realTimeDatabase } from "./api/firebase";
-import {updateUserLiveLocationInfo, UnterLocation} from './api/live_location'
-import {LocationProvider} from "./LocationProvider";
-
+import {Unter} from './Screens/Unter'
 
 LogBox.ignoreLogs([
   "EventEmitter.removeListener('appStateDidChange', ...)"
@@ -19,6 +16,18 @@ LogBox.ignoreLogs([
 const HomeStack = createStackNavigator();
 const DriverStack = createStackNavigator();
 const PassengerStack = createStackNavigator();
+
+//TODO:API-Call to get the current user's userName 
+const dummyPassenger = {
+  KeaG7oWA9tGo067gcByO: {
+      dob: "06-28-2000",
+      fName: "Hans",
+      lName: "Nee", 
+      type: "passenger",
+      username: "hansNee", 
+      id: "KeaG7oWA9tGso067gcByO"
+  }
+}
 
 const UnterHeaderOptions = ({ route }) => ({
   title: null,
@@ -36,16 +45,16 @@ const PassengerScreens = ({route, navigation}) => {
             headerBackTitleVisible: false,
             headerMode: 'float'
           }}>
-            
-            <PassengerStack.Screen 
-                name="Splash"
-                component={Passenger_Splash} 
-                options={{title:"Welcome!"}} 
-                initialParams={{"region": route.params.region, "position": route.params.position}}/>
-
+          
             <PassengerStack.Screen 
                 name="Passenger_PickLocation"
                 component={Passenger_PickLocation} 
+                initialParams={{
+                  "region": route.params.region,
+                  "position": route.params.position, 
+                  "user": dummyPassenger.KeaG7oWA9tGo067gcByO, 
+                  "color": "#E5E5E5"
+                }}
                 options = {UnterHeaderOptions}
             />
         
@@ -107,25 +116,7 @@ const DriverScreens = ({route, navigation}) => {
   )
 }
   
-const Unter = ({route, navigation}) => {
-  const handleOnPress = (type) => {
-    navigation.navigate(type, {
-      "region": route.params.region
-    })  
-  }
 
-  return (
-    <NativeBaseProvider>
-      <Center marginTop={"50%"}>
-        <Box>
-          <Button onPress={() => handleOnPress("Passenger")}>Passenger</Button>
-          <Button onPress={() => handleOnPress("Driver")}>Driver</Button>
-          <Button>Admin</Button>
-        </Box>
-      </Center>
-    </NativeBaseProvider>
-  )
-}
 
 const HomeNavigation = (props) => {
   return (

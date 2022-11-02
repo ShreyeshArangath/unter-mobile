@@ -15,7 +15,7 @@ export const TripIconButtonType = {
 //allow us to go to next page of the screen
 export function TripIconButton(props)
 {
-    const buttonColor = props.disabled ? 'grey' :  "#B53838"
+    const buttonColor =  props.color ? props.color :  "#B53838"
 
     return (
         <Box style={styles.boxStyle}>
