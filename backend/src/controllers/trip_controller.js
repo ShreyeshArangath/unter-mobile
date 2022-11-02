@@ -37,11 +37,11 @@ class TripController {
         const parsedTripInfo = {
             'driverID' : 'NULL',
             'driverRating' : -1,
-            'endLoc' : new GeoPoint(startingTripInfo.latitude, startingTripInfo.longitude), // change to an address?
+            'endLoc' : new GeoPoint(startingTripInfo.end_latitude, startingTripInfo.end_longitude),
             'endTime' : 0,
             'passID' : startingTripInfo.passengerID,
             'passRating' : -1,
-            'startLoc' : new GeoPoint(startingTripInfo.latitude, startingTripInfo.longitude), // change to an address?
+            'startLoc' : new GeoPoint(startingTripInfo.start_latitude, startingTripInfo.start_longitude),
             'startTime' : new Date(),
             'status' : TRIP_STATUS.in_queue
         }
@@ -57,7 +57,7 @@ class TripController {
         return await this._tripRepo.updateTripStatus(tripID, new_status)
     }
 
-    async endTrip(tripID, endLocation){  
+    async endTrip(tripID){  
 
         const att_updating = {
             'endTime' : new Date(),

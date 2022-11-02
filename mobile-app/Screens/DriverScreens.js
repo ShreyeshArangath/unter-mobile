@@ -66,19 +66,24 @@ export const Driver_Finding_Trip = ({navigation, route }) => {
     
     const route_to_passenger = () => {
         Api.GetNextTripInfo().then(trip => {
-            const tripID = Object.keys(trip)[0]
-            Api.AssignDriver(tripID, "Tyler").then(() => {
-                trip[tripID].status = "to_pass"; 
-                navigation.push('Driver_Mapping', {
-                    "user": route.params.user, 
-                    "region": route.params.region, 
-                    "origin": {"longitude": trip[tripID].startLoc.longitude, "latitude":trip[tripID].startLoc.latitude},
-                    "destination": {"longitude": trip[tripID].endLoc.longitude, "latitude":trip[tripID].endLoc.latitude},
-                    "tripID" : tripID,
-                    "tripInfo" : trip[tripID],
-                    "passId": trip[tripID].passID,
+            console.log(trip)
+            if (trip){
+
+                const tripID = Object.keys(trip)[0]
+            
+                Api.AssignDriver(tripID, "Tyler").then(() => {
+                    trip[tripID].status = "to_pass"; 
+                    navigation.push('Driver_Mapping', {
+                        "user": route.params.user, 
+                        "region": route.params.region, 
+                        "origin": {"longitude": trip[tripID].startLoc.longitude, "latitude":trip[tripID].startLoc.latitude},
+                        "destination": {"longitude": trip[tripID].endLoc.longitude, "latitude":trip[tripID].endLoc.latitude},
+                        "tripID" : tripID,
+                        "tripInfo" : trip[tripID],
+                        "passId": trip[tripID].passID,
+                    })
                 })
-            })
+            }
         });
     }
 

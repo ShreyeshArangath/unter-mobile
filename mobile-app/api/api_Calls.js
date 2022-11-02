@@ -2,12 +2,12 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {API_BASE_URL} from '@env'; 
 
-const URL = "https://235c-173-230-86-29.ngrok.io"
+const URL = "https://2d7e-68-234-181-23.ngrok.io"
 
 export const GetTripByID = (tripId) => {
     console.info("Getting trip ID...");
     return axios.get(URL + "/api/trips/id/"+tripId).then((res) => {
-        if (res.data != null) return res.data;
+        return (res.data && !Object.keys(res.data).length == 0) ?  res.data : false;
         return false;
     }).catch(err => {
         console.log(err)
@@ -20,7 +20,7 @@ export const GetNextTripInfo = () => {
     console.log("URL", URL)
     return axios.get(URL+ "/api/trips/ride/next/")
         .then(res => {
-            return (res.data != null) ?  res.data : false;
+            return (res.data && !Object.keys(res.data).length == 0) ?  res.data : false;
         }).catch(err => {
             throw {
                 code: err.code,
@@ -30,14 +30,20 @@ export const GetNextTripInfo = () => {
         })
 }
 
-export const StartTrip = (passengerID, origin) => {
+export const StartTrip = (passengerID, tripInfo) => {
     console.info("Starting a trip...");
-    return axios.post(URL+ "/api/trips/ride/start/", {'passengerID': passengerID, 'latitude': origin.latitude, 'longitude': origin.longitude}).then((res) => {
-        if (res.data != null) return res.data;
-        return false;
-    }).catch(err => {
-        return false;
-    })
+    return axios.post(URL+ "/api/trips/ride/start/", 
+        {
+            'passengerID': passengerID,
+            'start_latitude': tripInfo.start_latitude,
+            'start_longitude': tripInfo.start_longitude,
+            'end_latitude': tripInfo.end_latitude,
+            'end_longitude': tripInfo.end_longitude
+        }).then((res) => {
+            return (res.data != null) ? res.data : false
+        }).catch(err => {
+            return false;
+        })
 }
 
 export const AssignDriver = (tripID, driverID) => {
@@ -76,8 +82,7 @@ export const CompleteTrip = (tripID) => {
 export const GetAllTrips = () => {
     console.info("Getting all trips...");
     return axios.get(URL+ "/api/trips/all/").then((res) => {
-        if (res.data != null) return res.data;
-        return false;
+        return (res.data && !Object.keys(res.data).length == 0) ?  res.data : false;
     }).catch(err => {
         console.log(err);
         return false;
@@ -88,8 +93,7 @@ export const GetDriverTripHistory = (driverID) => {
     console.info("Getting driver history...");
     return axios.get(URL+ "/api/trips/driver/"+driverID).then((res) => {
         console.log(res.status);
-        if (res.data != null) return res.data;
-        return false;
+        return (res.data && !Object.keys(res.data).length == 0) ?  res.data : false;
     }).catch(err => {
         console.log(err);
         return false;
@@ -100,8 +104,7 @@ export const GetPassengerTripHistory = (PassengerID) => {
     console.info("Getting passenger history...");
     return axios.get(URL+ "/api/trips/passenger/"+PassengerID).then((res) => {
         console.log(res.status);
-        if (res.data != null) return res.data;
-        return false;
+        return (res.data && !Object.keys(res.data).length == 0) ?  res.data : false;
     }).catch(err => {
         console.log(err);
         return false;

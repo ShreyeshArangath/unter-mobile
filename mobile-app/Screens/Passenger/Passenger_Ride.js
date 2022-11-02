@@ -26,7 +26,7 @@ export const Passenger_Ride = ({route, navigation}) => {
     const [destination, setDestination] = useState(route.params.destination)
     const [duration, setDuration ] = useState(0)  //API returns duration in mins
     const [foundDriver, setFoundDriver] = useState(false)
-    const [driverId, setDriverId] = useState('shreyesh_test')
+    const [driverId, setDriverId] = useState(null)
     const [tripId, setTripId] = useState(route.params.tripId)
     const [driverLoc, setDriverLoc] = useState(null)
 
@@ -107,7 +107,6 @@ export const Passenger_Ride = ({route, navigation}) => {
     }
 
     const rideFound = () => {
-        
         return (
             <Flex alignItems="center" direction="column" >
                     <Instructions header={"Ride Found"} 

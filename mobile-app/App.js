@@ -77,42 +77,42 @@ const PassengerScreens = ({route, navigation}) => {
 // TODO: Pass in trip & user context in here 
 const DriverScreens = ({route, navigation}) => {
   return (
-        <DriverStack.Navigator 
-              screenOptions={{
-                  headerBackTitleVisible: false
-                }}>
+    <DriverStack.Navigator 
+      screenOptions={{
+        headerBackTitleVisible: false
+      }}>
 
-                <DriverStack.Screen 
-                  name="Driver_Splash"
-                  component={Driver_Splash} 
-                  options={{title: null, headerTransparent: true}} 
-                  initialParams={{"region": route.params.region}}
-                />
+        <DriverStack.Screen 
+          name="Driver_Splash"
+          component={Driver_Splash} 
+          options={{title: null, headerTransparent: true}} 
+          initialParams={{"region": route.params.region}}
+        />
 
-                <DriverStack.Screen 
-                  name="Driver_Finding_Trip"
-                  component={Driver_Finding_Trip} 
-                  options={{
-                    title: null, 
-                    headerTransparent: true, 
-                    headerBackVisible: true}} 
-                  initialParams={{"region": route.params.region}}
-                />
+        <DriverStack.Screen 
+          name="Driver_Finding_Trip"
+          component={Driver_Finding_Trip} 
+          options={{
+            title: null, 
+            headerTransparent: true, 
+            headerBackVisible: true}} 
+          initialParams={{"region": route.params.region}}
+        />
 
-                <DriverStack.Screen 
-                  name="Driver_Mapping"
-                  component={Driver_Mapping} 
-                  options = {({ route }) => ({
-                    title: null,
-                    headerLeft: null,
-                    headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
-                    headerStyle: {
-                      borderBottomWidth: 0,
-                    }
-                    })}
-                  initialParams={{"region": route.params.region}}
-                />
-              </DriverStack.Navigator>
+        <DriverStack.Screen 
+          name="Driver_Mapping"
+          component={Driver_Mapping} 
+          options = {({ route }) => ({
+            title: null,
+            headerLeft: null,
+            headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
+            headerStyle: {
+              borderBottomWidth: 0,
+            }
+            })}
+          initialParams={{"region": route.params.region}}
+        />
+    </DriverStack.Navigator>
   )
 }
   
