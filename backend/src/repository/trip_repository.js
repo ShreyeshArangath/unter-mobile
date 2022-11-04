@@ -71,12 +71,12 @@ class TripRepository {
         return jsonResult
     }
 
-    async createTrip(startingTripInfo) {
-        if (this._isLogQuery) console.log('Creating Trip with passengerID: ' + startingTripInfo.passID)
+    async createTrip(tripInfo) {
+        if (this._isLogQuery) console.log('Creating Trip with passengerID: ' + tripInfo.passID)
 
         var newTrip = await addDoc(
             collection(this._db, 'Trips'),
-            startingTripInfo
+            tripInfo
         )
         return newTrip.id
     }

@@ -11,11 +11,13 @@ import { TripButton } from '../../Components/TripButton';
 import MapViewDirections from 'react-native-maps-directions';
 import { Marker } from 'react-native-maps';
 import { useState } from 'react';
+import { StartTrip } from '../../api/api_Calls';
 
 export const Passenger_ConfirmLocation = ({route, navigation}) => {
     const [origin, setOrigin] = useState(route.params.origin)
     const [destination, setDestination] = useState(route.params.destination)
     const [duration, setDuration ] = useState(0)  //API returns duration in mins
+    const [debug, setDebug] = useState(true)
 
     const renderMarker = (loc, id) => {
         return <Marker identifier={id} coordinate={{latitude: loc.latitude, longitude: loc.longitude}}/>
@@ -34,16 +36,34 @@ export const Passenger_ConfirmLocation = ({route, navigation}) => {
       />
     }
 
-    const navigate = () => {
+    const confirmTripInfo = async (passenger) => {
+        StartTrip(
+            "Devin",// TODO: Get passenger ID from above 
+            {
+                'start_latitude': origin.latitude,
+                'start_longitude': origin.longitude,
+                'end_latitude': destination.latitude,
+                'end_longitude': destination.longitude
+            }
+        ).then(new_trip_id => {
+            if (new_trip_id){
+                navigate(new_trip_id)
+            }
+            else{
+                console.error("Starting a trip was unsuccessful.")
+            }
+        })
+    }
+
+    const navigate = (tripId) => {
           //TODO: Navigate to the next screen 
           navigation.push('Passenger_Ride', {
-            "user": {
-                "username": "Shreyesh"
-            }, 
+            "user": route.params.user, 
             "color": "#E5E5E5",
             "region": route.params.region, 
             "origin": origin, 
-            "destination": destination
+            "destination": destination,
+            "tripId": tripId
         })
     }
 
@@ -55,7 +75,7 @@ export const Passenger_ConfirmLocation = ({route, navigation}) => {
                         <Flex alignItems="center" direction="column" >
                             <Instructions header={"Confirm Destination"} 
                             body={`Travel Time: ${duration.toFixed(0)} mins`}/>
-                        <TripButton text={`Confirm Destination`} onPress={navigate}/>
+                        <TripButton text={`Confirm Destination`} onPress={confirmTripInfo}/>
                         </Flex>
                     </Box>
             </ZStack>

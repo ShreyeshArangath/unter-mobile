@@ -122,7 +122,7 @@ function getTripHandler(TripController) {
         * @api {post} api/trips/ride/start/           Start a trip with passenger
         * @apiName StartTrip
         * @apiGroup Trip
-        * @apiBody  {passengerID: x, latitude: x, longitude: y}                             GeoLocation of the start trip in JSON format 
+        * @apiBody  {passengerID: x, startlatitude: x, startlongitude: y, endlatitude: x, endlongitude: y}    
         * The latitude of this GeoPoint in the range [-90, 90].
         * The longitude of this GeoPoint in the range [-180, 180].
         * @apiSuccess {data}                                tripID
@@ -133,11 +133,14 @@ function getTripHandler(TripController) {
         
             if ( 
                 startingTripInfo.hasOwnProperty('passengerID') && startingTripInfo.passengerID &&
-                startingTripInfo.hasOwnProperty('latitude') && startingTripInfo.hasOwnProperty('longitude') &&
-                startingTripInfo.latitude >= -90 && startingTripInfo.latitude <= 90 &&
-                startingTripInfo.longitude >= -180 && startingTripInfo.longitude <= 180
+                startingTripInfo.hasOwnProperty('start_latitude') && startingTripInfo.hasOwnProperty('start_longitude') &&
+                startingTripInfo.start_latitude >= -90 && startingTripInfo.start_latitude <= 90 &&
+                startingTripInfo.start_longitude >= -180 && startingTripInfo.start_longitude <= 180 && 
+                startingTripInfo.hasOwnProperty('end_latitude') && startingTripInfo.hasOwnProperty('end_longitude') &&
+                startingTripInfo.end_latitude >= -90 && startingTripInfo.end_latitude <= 90 &&
+                startingTripInfo.end_longitude >= -180 && startingTripInfo.end_longitude <= 180
             ){
-                const data = await TripController.createTrip(startingTripInfo)//replace this body geo location
+                const data = await TripController.createTrip(startingTripInfo)
                 res.json(data)
             } else {
                 res.status(400)
@@ -213,7 +216,7 @@ function getTripHandler(TripController) {
             const tripID = req.params.tripID
 
             if ( tripID ) {
-                const data = await TripController.updateTripStatus(tripID)
+                const data = await TripController.endTrip(tripID)
                 res.json(data)
             } else {
                 res.status(400)

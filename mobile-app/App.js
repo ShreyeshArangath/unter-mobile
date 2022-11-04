@@ -1,106 +1,105 @@
-import { HStack, NativeBaseProvider, extendTheme } from "native-base";
+import { HStack, NativeBaseProvider, extendTheme, Button, KeyboardAvoidingView, Container, Box, Center } from "native-base";
 import { NavigationContainer} from "@react-navigation/native";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { Passenger_Splash, Passenger_PickLocation, LogoTitle, Passenger_ConfirmLocation, Passenger_Ride } from "./Screens/PassengerScreens";
 import { Driver_Splash, Driver_Finding_Trip, Driver_Mapping} from "./Screens/DriverScreens";
 import { TopMenuBar } from "./Components/TopMenuBar";
 import {useState, useEffect} from 'react'
 import * as Location from 'expo-location';
-import * as LiveLocation from './api/live_location';
-import { useFonts } from 'expo-font';
-
 import {LogBox} from "react-native";
+import {Unter} from './Screens/Unter'
 
 LogBox.ignoreLogs([
   "EventEmitter.removeListener('appStateDidChange', ...)"
 ])
 
-const NavStack = createNativeStackNavigator();
+const HomeStack = createStackNavigator();
+const DriverStack = createStackNavigator();
+const PassengerStack = createStackNavigator();
 
+//TODO:API-Call to get the current user's userName 
+const dummyPassenger = {
+  KeaG7oWA9tGo067gcByO: {
+      dob: "06-28-2000",
+      fName: "Hans",
+      lName: "Nee", 
+      type: "passenger",
+      username: "hansNee", 
+      id: "KeaG7oWA9tGso067gcByO"
+  }
+}
+
+const UnterHeaderOptions = ({ route }) => ({
+  title: null,
+  headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
+  headerStyle: {
+    borderBottomWidth: 0,
+  },
+})
 
 // TODO: Pass in user context in here 
-const PassengerScreens = (props) => {
+const PassengerScreens = ({route, navigation}) => {
     return (
-    <NavStack.Navigator  
+    <PassengerStack.Navigator  
         screenOptions={{
-            headerBackTitleVisible: false
+            headerBackTitleVisible: false,
+            headerMode: 'float'
           }}>
-            
-            <NavStack.Screen 
-                name="Splash"
-                component={Passenger_Splash} 
-                options={{title:"Welcome!"}} 
-                initialParams={{"region": props.region}}/>
-
-            <NavStack.Screen 
+          
+            <PassengerStack.Screen 
                 name="Passenger_PickLocation"
                 component={Passenger_PickLocation} 
-                options = {({ route }) => ({
-                    title: null,
-                    headerLeft: null,
-                    headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
-                    headerStyle: {
-                      borderBottomWidth: 0,
-                    },
-                  })}
+                initialParams={{
+                  "region": route.params.region,
+                  "position": route.params.position, 
+                  "user": dummyPassenger.KeaG7oWA9tGo067gcByO, 
+                  "color": "#E5E5E5"
+                }}
+                options = {UnterHeaderOptions}
             />
         
 
-        <NavStack.Screen 
+        <PassengerStack.Screen 
                 name="Passenger_ConfirmLocation"
                 component={Passenger_ConfirmLocation} 
-                options = {({ route }) => ({
-                    title: null,
-                    headerLeft: null,
-                    headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
-                    headerStyle: {
-                      borderBottomWidth: 0,
-                    },
-                  })}
+                options = {UnterHeaderOptions}
             />
 
-          <NavStack.Screen 
-          name="Passenger_Ride"
-          component={Passenger_Ride}
-          options = {({ route }) => ({
-            title: null,
-            headerLeft: null,
-            headerRight: () => <TopMenuBar color={route.params.color} user={route.params.user} /> ,
-            headerStyle: {
-              borderBottomWidth: 0,
-            },
-          })}
+        <PassengerStack.Screen 
+                  name="Passenger_Ride"
+                  component={Passenger_Ride}
+                  options = {UnterHeaderOptions}
           />
-        </NavStack.Navigator>
+        </PassengerStack.Navigator>
     )
 }
 
 // TODO: Pass in trip & user context in here 
-const DriverScreens = (props) => {
+const DriverScreens = ({route, navigation}) => {
   return (
-  <NavStack.Navigator  
+    <DriverStack.Navigator 
       screenOptions={{
-          headerBackTitleVisible: false
-        }}>
+        headerBackTitleVisible: false
+      }}>
 
-        <NavStack.Screen 
+        <DriverStack.Screen 
           name="Driver_Splash"
           component={Driver_Splash} 
           options={{title: null, headerTransparent: true}} 
-          initialParams={{"region": props.region}}
+          initialParams={{"region": route.params.region}}
         />
 
-        <NavStack.Screen 
+        <DriverStack.Screen 
           name="Driver_Finding_Trip"
           component={Driver_Finding_Trip} 
           options={{
             title: null, 
             headerTransparent: true, 
             headerBackVisible: true}} 
-          initialParams={{"region": props.region}}
+          initialParams={{"region": route.params.region}}
         />
 
-        <NavStack.Screen 
+        <DriverStack.Screen 
           name="Driver_Mapping"
           component={Driver_Mapping} 
           options = {({ route }) => ({
@@ -111,45 +110,55 @@ const DriverScreens = (props) => {
               borderBottomWidth: 0,
             }
             })}
-          initialParams={{"region": props.region}}
+          initialParams={{"region": route.params.region}}
         />
-      
-      </NavStack.Navigator>
+    </DriverStack.Navigator>
+  )
+}
+  
+
+
+const HomeNavigation = (props) => {
+  return (
+    <HomeStack.Navigator screenOptions={{
+      headerBackTitleVisible: false,
+      headerShown: false
+    }} >
+      <HomeStack.Screen  name="Unter" component={Unter} initialParams={{region: props.region}}/>
+      <HomeStack.Screen name="Passenger" component={PassengerScreens} initialParams={{region: props.region, position: props.position}} />
+      <HomeStack.Screen name="Driver" component={DriverScreens} initialParams={{region: props.region}} />
+    </HomeStack.Navigator>
   )
 }
 
-export const getUserLocation = async (setRegion) => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setLocationErrMsg('Permission to access location was denied');
-      return;
-    }
-    await Location.getCurrentPositionAsync({}).then((location) => {
-        setRegion({
-          latitude: location.coords.latitude, 
-          longitude: location.coords.longitude
-        });
-      }).catch((err) => {
-        console.log(err)
-      })
-}
 
-    
 export default function App() {
+  // Define position state: {latitude: number, longitude: number}
+  const [position, setPosition] = useState({
+    latitude: 37.78825, 
+    longitude: -122.4324 
+})
+  const [user, setUser] = useState('shreyesh_test')
   const [region, setRegion] = useState({
       latitude: 33.58447,
       longitude: -101.87469 
   })
 
-  useEffect(() => { getUserLocation(setRegion)}, [])
+   // Request permissions right after starting the app
+  useEffect(() => {
+    const requestPermissions = async () => {
+      const foreground = await Location.requestForegroundPermissionsAsync()
+      if (foreground.granted) await Location.requestBackgroundPermissionsAsync()
+    }
+    requestPermissions()
+  }, [])
 
     return (
-        <NativeBaseProvider styles={{fontFamily:'Plus-Jakarta-Sans'}}>
-             <NavigationContainer>
-              {/* <DriverScreens region={region}/> */}
-              {/* <PassengerScreens region={region}/> */}
+        <NativeBaseProvider styles={{fontFamily:'Plus-Jakarta-Sans' }}>
+            <NavigationContainer>
+              <HomeNavigation region={region} position={position}/>
             </NavigationContainer>
-        </NativeBaseProvider>
-      
+        </NativeBaseProvider>   
+         
     )
 }

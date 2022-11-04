@@ -10,17 +10,15 @@ import {GOOGLE_MAPS_API_KEY} from '@env';
 import { TripButton } from '../../Components/TripButton';
 import { useState } from 'react';
 import {SearchBox} from '../../Components/SearchBox';
+import * as Api from '../../api/api_Calls'
 
 export const Passenger_PickLocation = ({route, navigation}) => {
     const [origin, setOrigin] = useState(null)
     const [destination, setDestination] = useState(null)
 
     const navigate = () => {
-        //TODO: Navigate to the next screen 
         navigation.push('Passenger_ConfirmLocation', {
-            "user": {
-                "username": "Shreyesh"
-            }, 
+            "user": route.params.user, 
             "color": "#E5E5E5",
             "region": route.params.region, 
             "origin": origin, 
