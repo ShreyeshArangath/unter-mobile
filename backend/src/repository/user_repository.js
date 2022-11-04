@@ -108,11 +108,3 @@ class UserRepository {
 module.exports = {
     UserRepository
 }
-
-/*const querySnapshot = await getDocs(query(collection(this._db, 'Trips'),
-where("name", "==", tripID)))
-let jsonResult = {}
-querySnapshot.forEach(doc => {
-jsonResult[doc.id] = doc.data()
-});
-return jsonResult*/
