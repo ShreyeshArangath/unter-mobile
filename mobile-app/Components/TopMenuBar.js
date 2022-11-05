@@ -15,7 +15,7 @@ export function TopMenuBar(props)
     <HStack space={5} justifyContent="center" >
          <Center>
             <Text style={{ fontWeight: 'bold', fontSize: 20 }}>
-                {props.user.username}
+                {props.user.fName}
             </Text>
         </Center>
         <Center>

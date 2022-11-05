@@ -24,10 +24,12 @@ export default function GoogleMap(props) {
                 style={ styles.map }
                 provider={PROVIDER_GOOGLE}
                 followsUserLocation
+                showsMyLocationButton
                 showsUserLocation
                 initialRegion={region}>
               {props.originMarker}
               {props.destinationMarker}
+              {props.driverMarker}
               {props.directions}
             </MapView>
     )

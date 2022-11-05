@@ -13,8 +13,22 @@ import React, { Component, useState } from 'react';
 //allow us to go to next page of the screen
 export function TripButton(props)
 {
-    const buttonColor = props.disabled ? 'grey' :  "#B53838"
-
+    const buttonColor = props.color ? props.color :  "#B53838"
+    const textColor = props.textColor ? props.textColor: "white"
+    const styles =  StyleSheet.create({
+        boxStyle: {
+            width: '90%',
+            margin: 5,
+        },
+        button: {
+            borderRadius: 12,
+            padding: 50
+        },
+        text: {
+            color: textColor, 
+        }
+    })
+     
     return (
         <Box style={styles.boxStyle}>
             
@@ -24,18 +38,6 @@ export function TripButton(props)
         </Box>
        
     )
+
 }
 
-const styles =  StyleSheet.create({
-    boxStyle: {
-        width: '90%',
-        margin: 5,
-    },
-    button: {
-        borderRadius: 12,
-        padding: 50
-    },
-    text: {
-        color: 'white', 
-    }
-})
