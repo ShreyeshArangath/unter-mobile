@@ -10,7 +10,6 @@ export const Unter = ({route, navigation}) => {
         "region": route.params.region
       })  
     }
-
     return (
       <NativeBaseProvider>
         <Center marginTop={"50%"}>
