@@ -9,8 +9,7 @@ import { Instructions } from '../../Components/Instructions';
 import {GOOGLE_MAPS_API_KEY} from '@env';
 import { TripButton } from '../../Components/TripButton';
 import { useState } from 'react';
-import {SearchBox} from '../../Components/SearchBox';
-import * as Api from '../../api/api_Calls'
+import { SearchBox } from '../../Components/SearchBox';
 
 export const Passenger_PickLocation = ({route, navigation}) => {
     const [origin, setOrigin] = useState(null)
@@ -30,7 +29,7 @@ export const Passenger_PickLocation = ({route, navigation}) => {
         <NativeBaseProvider safeArea >
             <ZStack position={"relative"} width="100%" height="100%" >
                 <GoogleMap />
-                    <Box width="100%" marginTop={20}>
+                    <Box width="100%" marginTop={1}>
                         <Flex alignItems="center" direction="column" >
                             <Instructions header={"Enter your destination"} 
                             body={"Where are we going today?"}/>

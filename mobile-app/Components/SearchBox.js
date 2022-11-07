@@ -15,11 +15,11 @@ export function SearchBox(props) {
                     setter={props.originSetter}/>
                 <Divider style={styles.divider}/>
                 <GoogleMapSearch 
-                type={"destination"}
-                placeholder="Where to?"
-                api_key={props.api_key}
-                region={props.region} 
-                setter={props.destinationSetter}/>  
+                    type={"destination"}
+                    placeholder="Where to?"
+                    api_key={props.api_key}
+                    region={props.region} 
+                    setter={props.destinationSetter}/>  
             </Flex>   
         </Box>
        
@@ -28,10 +28,12 @@ export function SearchBox(props) {
 
 const styles =  StyleSheet.create({
     boxStyle: {
-        width: '90%',
+        width: '100%',
+        maxWidth: '90%',
         backgroundColor: '#FFFFFF',
         borderRadius: 20,
         margin: 5,
+        paddingHorizontal: 15
     },
     divider: {
         width: "80%"
