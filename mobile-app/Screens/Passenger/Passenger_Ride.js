@@ -20,7 +20,6 @@ import { renderDirection } from '../../Components/map_direction';
 import DriverImage from '../../assets/among_us_red.png';
 import PinImage from '../../assets/Pin.png';
 
-
 export const Passenger_Ride = ({route, navigation}) => {
     const [origin, setOrigin] = useState(route.params.origin)
     const [destination, setDestination] = useState(route.params.destination)
