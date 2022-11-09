@@ -5,6 +5,7 @@ import {
     ZStack, 
     Flex,
     HStack,
+    useBreakpointValue,
 } from 'native-base';
 import { Instructions } from '../../Components/Instructions';
 import { TripButton } from '../../Components/TripButton';
@@ -38,7 +39,11 @@ export const Passenger_Ride = ({route, navigation}) => {
                 setDistance(res.distance) })
     )
 
-    // Check firestore to see if we have a driver for the given trip
+    const navigate_splash = () => {
+        navigation.navigate("Passenger_Splash")
+   }   
+
+    // Check firestore to see if we have a trip alter
     useEffect(() => {
         const unsubscribe = onSnapshot(doc(fireStore, "Trips", tripId), 
         (res) => {    
@@ -49,7 +54,17 @@ export const Passenger_Ride = ({route, navigation}) => {
                 setFoundDriver(true)
             } else {
                 setFoundDriver(false)
-            }
+            } 
+            switch(tripInfo["status"]){
+                case ("completed"):
+                    //TODO: add trip raiting page
+                    navigate_splash()
+                    break;
+                default:
+                    break;
+                }
+
+            
         }, (err) => {
             console.log(err)
         });

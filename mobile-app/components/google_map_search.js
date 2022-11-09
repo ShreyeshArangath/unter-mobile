@@ -13,7 +13,7 @@ export default function GoogleMapSearch(props) {
     <GooglePlacesAutocomplete
         placeholder={props.placeholder}
         textInputProps={{
-          placeholderTextColor: '#000000',
+          placeholderTextColor: '#808080',
           fontWeight: "400",
           returnKeyType: "search"
         }}
