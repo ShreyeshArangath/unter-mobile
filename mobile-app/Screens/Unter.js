@@ -11,10 +11,6 @@ export const Unter = ({route, navigation}) => {
       })  
     }
 
-    const handleRatings = () => {
-      return (<UnterRatingModal />)
-    }
-  
     return (
       <NativeBaseProvider>
         <Center marginTop={"50%"}>
