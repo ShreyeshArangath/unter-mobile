@@ -16,7 +16,7 @@ export default function GoogleMap(props) {
         if (props.originMarker && props.destinationMarker) mapRef.current.fitToSuppliedMarkers(["origin", "destination"], {edgePadding: {left: 50, right: 50}}, true)
     }, [])
 
-    const [region, setRegion] = useState(TexasTechDefaultRegion)
+    const [region, setRegion] = useState((props.startingRegion==undefined)?TexasTechDefaultRegion:props.startingRegion)
     
     return (
             <MapView
