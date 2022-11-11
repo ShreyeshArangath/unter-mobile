@@ -24,6 +24,8 @@ import DriverImage from '../assets/among_us_red.png';
 import PinImage from '../assets/Pin.png';
 import * as Api from '../api/api_Calls'
 import { LocationProvider } from '../LocationProvider';
+import { UnterRatingModal } from '../Components/Rating';
+import { PassengerCard } from '../Components/PassengerCard';
 
 
 export const Driver_Splash = ({ navigation, route }) => {
@@ -80,7 +82,6 @@ export const Driver_Finding_Trip = ({navigation, route }) => {
                         "destination": {"longitude": trip[tripID].endLoc.longitude, "latitude":trip[tripID].endLoc.latitude},
                         "tripID" : tripID,
                         "tripInfo" : trip[tripID],
-                        "passId": trip[tripID].passID,
                     })
                 })
             }
@@ -112,6 +113,8 @@ export const Driver_Mapping = ({navigation, route}) => {
     const [destination, setDestination] = useState(route.params.destination)
     const [duration, setDuration] = useState(0) //API returns duration in mins
     const [distance, setDistance] = useState(0)
+    const [rating, setRating] = useState(false)
+
     var trip = route.params.tripInfo
 
     const [directions, setDirections] = useState(renderDirection(origin, 
@@ -121,11 +124,15 @@ export const Driver_Mapping = ({navigation, route}) => {
             setDistance(res.distance) })
     )
 
+    const completeTrip = () => {
+        Api.CompleteTrip(route.params.tripID)
+        navigation.navigate('Driver_Finding_Trip')
+    }
+
     const progress_next_step = () => {
         switch (trip.status ) {
             case "on_delivery":
-                Api.CompleteTrip(route.params.tripID)
-                navigation.navigate('Driver_Finding_Trip')
+                setRating(true)
                 break;
             case "to_pass":
                 Api.UpdateTripStatus(route.params.tripID, "on_delivery")
@@ -153,10 +160,12 @@ export const Driver_Mapping = ({navigation, route}) => {
                     destinationMarker={renderMarker(destination,PinImage, "destination")} />
                 <Box width="100%" marginTop={10}>
                     <Flex alignItems="center" direction="column" >
-                        <Instructions header={TEXT_INSTRUCTIONS[trip.status].header_instruction} 
-                        body={`It'll take you ${duration.toFixed(0)} mins to drop off ${route.params.passId}`}/>
-                    <TripButton text={TEXT_INSTRUCTIONS[trip.status].button_instruction} onPress={progress_next_step}/>
+                        <Instructions header={TEXT_INSTRUCTIONS[trip.status].header_instruction} />
+                         {/* do an api call to get the passenger's name and not the id */}
+                        <PassengerCard header={"Passenger Info"} extraInfo={route.params.tripInfo.passID} time={duration.toFixed(0)}/>
+                        <TripButton text={TEXT_INSTRUCTIONS[trip.status].button_instruction} onPress={progress_next_step}/>
                     </Flex>
+                    {rating &&  <UnterRatingModal tripID={route.params.tripID} rater={'driver'}  onFinishRating={completeTrip}/>}
                 </Box>
             </ZStack>
             </LocationProvider>

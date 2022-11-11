@@ -1,5 +1,7 @@
 import { HStack, NativeBaseProvider, extendTheme, Button, KeyboardAvoidingView, Container, Box, Center, Flex } from "native-base";
+import { useState } from "react";
 import { Image, StyleSheet } from "react-native";
+import { UnterRatingModal } from "../Components/Rating";
 import { TripButton } from "../Components/TripButton";
 
 export const Unter = ({route, navigation}) => {
@@ -7,6 +9,10 @@ export const Unter = ({route, navigation}) => {
       navigation.navigate(type, {
         "region": route.params.region
       })  
+    }
+
+    const handleRatings = () => {
+      return (<UnterRatingModal />)
     }
   
     return (
