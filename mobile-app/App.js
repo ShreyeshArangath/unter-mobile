@@ -44,31 +44,39 @@ const PassengerScreens = ({route, navigation}) => {
         screenOptions={{
             headerBackTitleVisible: false,
             headerMode: 'float'
-          }}>
+        }}>
+
+          <PassengerStack.Screen 
+            name="Passenger_Splash"
+            component={Passenger_Splash} 
+            options = {{
+              title: null, 
+              headerTransparent: true, 
+              headerBackVisible: true}}
+          />
           
-            <PassengerStack.Screen 
-                name="Passenger_PickLocation"
-                component={Passenger_PickLocation} 
-                initialParams={{
-                  "region": route.params.region,
-                  "position": route.params.position, 
-                  "user": dummyPassenger.KeaG7oWA9tGo067gcByO, 
-                  "color": "#E5E5E5"
-                }}
-                options = {UnterHeaderOptions}
-            />
-        
+          <PassengerStack.Screen 
+            name="Passenger_PickLocation"
+            component={Passenger_PickLocation} 
+            initialParams={{
+              "region": route.params.region,
+              "position": route.params.position, 
+              "user": dummyPassenger.KeaG7oWA9tGo067gcByO, 
+              "color": "#E5E5E5"
+            }}
+            options = {UnterHeaderOptions}
+          />
 
-        <PassengerStack.Screen 
-                name="Passenger_ConfirmLocation"
-                component={Passenger_ConfirmLocation} 
-                options = {UnterHeaderOptions}
-            />
+          <PassengerStack.Screen 
+            name="Passenger_ConfirmLocation"
+            component={Passenger_ConfirmLocation} 
+            options = {UnterHeaderOptions}
+          />
 
-        <PassengerStack.Screen 
-                  name="Passenger_Ride"
-                  component={Passenger_Ride}
-                  options = {UnterHeaderOptions}
+          <PassengerStack.Screen 
+            name="Passenger_Ride"
+            component={Passenger_Ride}
+            options = {UnterHeaderOptions}
           />
         </PassengerStack.Navigator>
     )
