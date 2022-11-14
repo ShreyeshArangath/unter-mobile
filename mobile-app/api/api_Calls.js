@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {API_BASE_URL} from '@env'; 
 
-const URL = "https://33f3-173-230-86-27.ngrok.io"
+const URL = "http://10.161.59.77:9001"
 
 export const GetAllUsers = () => {
     console.info("Getting all users...")
@@ -167,3 +167,13 @@ export const ChangeTripInfo = (tripID, attr) => {
     })
 }
 
+export const GetUserByID = (userID) => {
+    console.info("Getting user info...");
+    return axios.get(URL + "/api/users/id/"+userID).then((res) => {
+        return (res.data && !Object.keys(res.data).length == 0) ?  res.data : false;
+        return false;
+    }).catch(err => {
+        console.log(err)
+        return false;
+    })
+}
