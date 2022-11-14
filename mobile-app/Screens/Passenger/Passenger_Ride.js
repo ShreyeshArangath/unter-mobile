@@ -7,6 +7,7 @@ import {
     HStack,
     useBreakpointValue,
 } from 'native-base';
+import {Image} from 'react-native'
 import { Instructions } from '../../Components/Instructions';
 import { TripButton } from '../../Components/TripButton';
 import { useEffect, useState } from 'react';

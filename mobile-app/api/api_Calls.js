@@ -4,11 +4,19 @@ import {API_BASE_URL} from '@env';
 
 const URL = "https://33f3-173-230-86-27.ngrok.io"
 
+export const GetAllUsers = () => {
+    console.info("Getting all users...")
+    return axios.get(URL + "/api/users/all").then((res)=>{
+        return (res.data && !Object.keys(res.data).length == 0) ? res.data : false;
+    }).catch(err => {
+        console.log(err);
+        return false;
+    })
+}
 export const GetTripByID = (tripId) => {
     console.info("Getting trip ID...");
     return axios.get(URL + "/api/trips/id/"+tripId).then((res) => {
         return (res.data && !Object.keys(res.data).length == 0) ?  res.data : false;
-        return false;
     }).catch(err => {
         console.log(err)
         return false;
