@@ -20,6 +20,7 @@ import { renderMarker } from '../../Components/map_marker';
 import { renderDirection } from '../../Components/map_direction';
 import DriverImage from '../../assets/among_us_red.png';
 import PinImage from '../../assets/Pin.png';
+import * as SMS from 'expo-sms';
 
 export const Passenger_Ride = ({route, navigation}) => {
     const [origin, setOrigin] = useState(route.params.origin)
@@ -109,7 +110,12 @@ export const Passenger_Ride = ({route, navigation}) => {
                             <TripButton text={"Change Location"} onPress={() => {}}/>
                         </HStack>
                         <HStack>
-                            <TripIconButton type={TripIconButtonType.Call} onPress={() => {}}/>
+                            <TripIconButton type={TripIconButtonType.Call} onPress={ async () => {
+                                const { result } = await SMS.sendSMSAsync(
+                                    '806224',
+                                    'I have arrived.'
+                                );
+                            }}/>
                             <TripIconButton type={TripIconButtonType.Emergency} onPress={() => {}}/>
             
                         </HStack>
