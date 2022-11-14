@@ -8,7 +8,7 @@ import {View, StyleSheet } from 'react-native';
 import React from 'react';
 
 export const TripIconButtonType = {
-    Call: 'call-sharp',
+    Message: 'chatbox-ellipses-sharp',
     Emergency: 'alert-sharp'
 }
 

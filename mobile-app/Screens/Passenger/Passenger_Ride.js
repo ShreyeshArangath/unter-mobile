@@ -20,7 +20,10 @@ import { renderMarker } from '../../Components/map_marker';
 import { renderDirection } from '../../Components/map_direction';
 import DriverImage from '../../assets/among_us_red.png';
 import PinImage from '../../assets/Pin.png';
-import * as SMS from 'expo-sms';
+import * as SMS from 'expo-sms'; 
+import * as API from '../../api/api_Calls'
+import { Rating } from 'react-native-ratings';
+import { UnterRatingModal } from '../../Components/Rating';
 
 export const Passenger_Ride = ({route, navigation}) => {
     const [origin, setOrigin] = useState(route.params.origin)
@@ -31,6 +34,8 @@ export const Passenger_Ride = ({route, navigation}) => {
     const [driverId, setDriverId] = useState(null)
     const [tripId, setTripId] = useState(route.params.tripId)
     const [driverLoc, setDriverLoc] = useState(null)
+    const [driverInfo, setDriverInfo] = useState(null)
+    const [rating, setRating] = useState(false)
     const [directions, setDirections] = useState(
         renderDirection(
             origin, 
@@ -40,18 +45,21 @@ export const Passenger_Ride = ({route, navigation}) => {
                 setDistance(res.distance) })
     )
 
-    const navigate_splash = () => {
-        navigation.navigate("Passenger_Splash")
-   }   
+   const completeTrip = () => {
+    navigation.navigate("Passenger_Splash")
+    }
 
-    // Check firestore to see if we have a trip alter
     useEffect(() => {
         const unsubscribe = onSnapshot(doc(fireStore, "Trips", tripId), 
         (res) => {    
             const tripInfo = res.data()
             if(tripInfo["driverID"] != "NULL"){
                 setDriverId(tripInfo["driverID"])
-                //TODO:API-CALL Add API calls to get the driver name from the driver id
+                API.GetUserByID(driverId).then(res => {
+                    setDriverInfo(res[driverId])
+                }).catch(() => {
+                    console.log("Something went wrong when getting the driver details")
+                })
                 setFoundDriver(true)
             } else {
                 setFoundDriver(false)
@@ -59,7 +67,7 @@ export const Passenger_Ride = ({route, navigation}) => {
             switch(tripInfo["status"]){
                 case ("completed"):
                     //TODO: add trip raiting page
-                    navigate_splash()
+                    setRating(true)
                     break;
                 default:
                     break;
@@ -104,20 +112,20 @@ export const Passenger_Ride = ({route, navigation}) => {
             <Flex alignItems="center" direction="column" >
                     <Instructions header={"Ride Found"} 
                                 body={`Hang tight - we’ll be there shortly.`}/>
-                    <VehicleCard header={"Unter Van"} found={true} extraInfo={`${driverId} coming to pick you up`}/> 
+                    <VehicleCard header={"Unter Van"} found={true} extraInfo={`${driverInfo["fName"]} coming to pick you up`}/> 
                     <Flex direction="row">
                         <HStack width={"50%"}>
                             <TripButton text={"Change Location"} onPress={() => {}}/>
                         </HStack>
                         <HStack>
-                            <TripIconButton type={TripIconButtonType.Call} onPress={ async () => {
+                            <TripIconButton type={TripIconButtonType.Message} onPress={ async () => {
                                 const { result } = await SMS.sendSMSAsync(
-                                    '806224',
+                                    driverInfo["phone"],
                                     'I have arrived.'
                                 );
                             }}/>
                             <TripIconButton type={TripIconButtonType.Emergency} onPress={() => {}}/>
-            
+                            {rating &&  <UnterRatingModal tripID={tripId} rater={'passenger'}  onFinishRating={completeTrip}/>}
                         </HStack>
                     </Flex>
             </Flex>   
