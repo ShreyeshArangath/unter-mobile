@@ -1,26 +1,25 @@
-import { Box, HStack, VStack, Text, Flex } from "native-base";
+import { Box, HStack, VStack, Text, Flex, Avatar} from "native-base";
 import {Image, StyleSheet} from 'react-native'
+import { FINDING_DRIVER, FOUND_DRIVER } from "../config/default_images";
 
 export function VehicleCard(props) {
     //TODO: Replace it with better images
-    const findingDriver = require('../assets/among_us_blue.png')
-    const foundDriver = require('../assets/among_us_red.png')
-    const vehicleCardImage = props.found ? foundDriver : findingDriver
-
+    const vehicleCardImage = props.found ? FOUND_DRIVER : FINDING_DRIVER
     return (
         <Box style={styles.boxStyle}>
             <HStack>
-            <Image
-                source={vehicleCardImage}
-                style={styles.imageStyle}
-             />
+            <Avatar 
+                size="lg"
+                source={{uri: vehicleCardImage}} 
+            />
                 <VStack style={styles.descriptionBox}>
                     <Text bold>{props.header}</Text>
                     <Text>{props.extraInfo}</Text>
                 </VStack>
-            <VStack style={styles.timeBox}>
-                <Text color={"grey"}>5 mins</Text>
-            </VStack>
+                <VStack style={styles.timeBox} backgroundColor={"gray.100"}>
+                    <Text bold>ETA</Text>
+                    <Text>{props.time} mins</Text>
+                </VStack>
             </HStack>
         </Box>
     )
@@ -40,15 +39,15 @@ const styles = StyleSheet.create({
     imageStyle: {
         width: 25, 
         height: 35,
-        margin: 10,
+        margin: 10
     },
     descriptionBox: {
+        marginLeft: 40,
         margin: 5,
     },
     timeBox: {
-        marginLeft: 20,
-        marginTop: 10,
+        marginLeft: 40,
         padding: 10,
+        borderRadius: 5
     }
-   
 })

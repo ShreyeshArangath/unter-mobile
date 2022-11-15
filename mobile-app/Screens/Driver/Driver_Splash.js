@@ -24,6 +24,7 @@ export const Driver_Splash = ({ navigation, route }) => {
                                 "username": "Tyler",
                                 "fName": "Tyler"
                             }, 
+                            "userID": "xi4LoWvB7HvTtXsERNq3",
                             "color": "#E5E5E5",
                             "region": route.params.region
                         })

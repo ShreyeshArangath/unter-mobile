@@ -3,8 +3,9 @@ import {
     NativeBaseProvider,
     ZStack, 
     Flex,
+    HStack,
 } from 'native-base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GoogleMap from '../../Components/google_map';
 import { Instructions } from '../../Components/Instructions';
 import { TripButton } from '../../Components/TripButton';
@@ -16,6 +17,8 @@ import * as Api from '../../api/api_Calls'
 import { LocationProvider } from '../../LocationProvider';
 import { UnterRatingModal } from '../../Components/Rating';
 import { PassengerCard } from '../../Components/PassengerCard';
+import { TripIconButton, TripIconButtonType} from '../../Components/TripIconButton';
+import { sendSMS } from '../../api/notifications';
 
 export const Driver_Mapping = ({navigation, route}) => {
     const [origin, setOrigin] = useState(route.params.region) // TODO: set with users current location
@@ -52,7 +55,11 @@ export const Driver_Mapping = ({navigation, route}) => {
                     "origin": {"longitude": route.params.tripInfo.startLoc.longitude, "latitude": route.params.tripInfo.startLoc.latitude},
                     "destination": {"longitude": route.params.tripInfo.endLoc.longitude, "latitude": route.params.tripInfo.endLoc.latitude},
                     "tripID" : route.params.tripID,
-                    "tripInfo" : trip
+                    "tripInfo" : trip,
+                    "passID": route.params.passID, 
+                    "phone": route.params.phone, 
+                    "passengerName": route.params.passengerName,
+                    "userID": route.params.userID
                 })
                 break;
             default:
@@ -60,20 +67,27 @@ export const Driver_Mapping = ({navigation, route}) => {
         }
     }
 
-    return (// TODO: Add notify passenger Driver is here
+    return (
         <NativeBaseProvider>
-            <LocationProvider name={route.params.user.username}>
+            <LocationProvider name={route.params.userID}>
             <ZStack position={"relative"} width="100%" height="100%" >
                 <GoogleMap directions={directions}
                     originMarker={renderMarker(origin, PinImage, "origin")}
                     destinationMarker={renderMarker(destination,PinImage, "destination")} />
                 <Box width="100%" marginTop={10}>
-                    <Flex alignItems="center" direction="column" >
-                        <Instructions header={TEXT_INSTRUCTIONS[trip.status].header_instruction} />
-                         {/* do an api call to get the passenger's name and not the id */}
-                        <PassengerCard header={"Passenger Info"} extraInfo={route.params.tripInfo.passID} time={duration.toFixed(0)}/>
-                        <TripButton text={TEXT_INSTRUCTIONS[trip.status].button_instruction} onPress={progress_next_step}/>
+                <Flex alignItems="center" direction="column" >
+                    <Instructions header={TEXT_INSTRUCTIONS[trip.status].header_instruction} />
+                    <PassengerCard header={"Passenger Info"} extraInfo={route.params.passengerName} time={duration.toFixed(0)}/>
+                    <Flex direction="row" >    
+                        <HStack width={"50%"}>
+                            <TripButton text={TEXT_INSTRUCTIONS[trip.status].button_instruction} onPress={progress_next_step}/>
+                        </HStack>
+                        <HStack>
+                            <TripIconButton type={TripIconButtonType.Message} onPress={ () => sendSMS(route.params.phone, "I'm here.")}/>
+                            <TripIconButton type={TripIconButtonType.Emergency} onPress={() => {}}/>
+                        </HStack>       
                     </Flex>
+                </Flex>  
                     {rating &&  <UnterRatingModal tripID={route.params.tripID} rater={'driver'}  onFinishRating={completeTrip}/>}
                 </Box>
             </ZStack>
