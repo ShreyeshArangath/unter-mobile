@@ -70,14 +70,13 @@ function getUserHandler(UserController)
         }
     })
 
-    router.post('/create/:username/:password', async function(req, res, next) {
+    router.post('/create', async function(req, res, next) {
+        console.log("Attempting routing")
         try {  
-            const username = req.params["username"]
-            const password = req.params["password"]
             const userData = req.body
             if (true){
 
-                const data = await UserController.createUser(username, password, userData)
+                const data = await UserController.createUser(userData)
                 res.json(data)
             } else {
                 res.status(400)
@@ -92,6 +91,7 @@ function getUserHandler(UserController)
     })
 
     router.get('/signin/:username/:password', async function(req, res, next) {
+        console.log("Sign in attempting routing")
         try {  
             const username = req.params["username"]
             const password = req.params["password"]

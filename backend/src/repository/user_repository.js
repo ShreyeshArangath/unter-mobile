@@ -36,9 +36,12 @@ class UserRepository {
         return jsonUserResult
     }
 
-    async createUser(username, password, userData) {
+    async createUser(userData) {
+        console.log("Create user attempt backend")
         const auth = getAuth()
         var user
+        var username = userData.username
+        var password = userData.password
         createUserWithEmailAndPassword(auth, username, password)
         .then((userCredential) => {
             console.log("Logged In")
@@ -61,14 +64,15 @@ class UserRepository {
         signInWithEmailAndPassword(auth, username, password)
         .then((userCredential) => {
             console.log("Signing in as " + userCredential.user)
-            user = userCredential
+            user = userCredential.user
+            console.log("Signed in as user " + user)
+            return user
         })
         .catch((error) => {
             const errorcode = error.code;
             const errormessage = error.message;
+            return false;
         });
-        console.log("Signed in as user " + user)
-        return user
     }
 
     async signOutUser(){

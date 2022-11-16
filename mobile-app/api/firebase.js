@@ -3,6 +3,7 @@ import {FIREBASE_apiKey, FIREBASE_authDomain, FIREBASE_projectId, FIREBASE_stora
   import {initializeApp} from 'firebase/app'
   import {getDatabase} from 'firebase/database'
   import {getFirestore} from 'firebase/firestore'
+  import {getAuth} from 'firebase/auth'
   
   const firebaseConfig = {
     "apiKey": FIREBASE_apiKey, 
@@ -17,6 +18,7 @@ import {FIREBASE_apiKey, FIREBASE_authDomain, FIREBASE_projectId, FIREBASE_stora
   const firebaseApp = initializeApp(firebaseConfig)
   const realTimeDatabase = getDatabase(firebaseApp);
   const fireStore = getFirestore(firebaseApp)
+  const auth = getAuth(firebaseApp)
 
   
-  export {firebaseApp, realTimeDatabase, fireStore}
+  export {firebaseApp, realTimeDatabase, fireStore, auth}

@@ -8,6 +8,8 @@ import {useState, useEffect} from 'react'
 import * as Location from 'expo-location';
 import {LogBox} from "react-native";
 import {Unter} from './Screens/Unter'
+import {Login_Splash} from './Screens/LoginScreen'
+import {SignUp_Splash} from './Screens/SignUpScreen'
 
 LogBox.ignoreLogs([
   "EventEmitter.removeListener('appStateDidChange', ...)"
@@ -124,6 +126,8 @@ const HomeNavigation = (props) => {
       headerBackTitleVisible: false,
       headerShown: false
     }} >
+      <HomeStack.Screen name="Login" component={Login_Splash} initialParams={{region: props.region}}/>
+      <HomeStack.Screen name="SignUp" component={SignUp_Splash} initialParams={{region: props.region}} />
       <HomeStack.Screen  name="Unter" component={Unter} initialParams={{region: props.region}}/>
       <HomeStack.Screen name="Passenger" component={PassengerScreens} initialParams={{region: props.region, position: props.position}} />
       <HomeStack.Screen name="Driver" component={DriverScreens} initialParams={{region: props.region}} />

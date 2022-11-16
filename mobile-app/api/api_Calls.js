@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {API_BASE_URL} from '@env'; 
 
-const URL = "https://2d7e-68-234-181-23.ngrok.io"
+const URL = "http://10.161.167.229:9001"
 
 export const GetTripByID = (tripId) => {
     console.info("Getting trip ID...");
@@ -157,5 +157,34 @@ export const ChangeTripInfo = (tripID, attr) => {
         console.log(err);
         return false;
     })
+}
+
+export const CreateUserFrontend = (username, password, fname, lname, phone, type) => {
+    console.info("Creating new user in firebase... from API call.");
+    console.info("Data passed as %s %s %s %s %s %s", username, password, fname, lname, phone, type)
+    return axios.post(URL + "/api/users/create", 
+    {
+        'username': username,
+        'password': password,
+        'fname' : fname,
+        'lname' : lname,
+        'phone' : phone, //ITS CALLED PHONE
+        'userType': type,
+    }).then((res) => {
+        return (res.data != null) ? res.data : false
+    }).catch(err => {
+        return false
+    })
+}
+
+//export const updateUserFrontend = ()
+
+export const SignInUserFrontend = (username, password) => {
+    console.info("Attempting sign in from API call"+username+"/"+password)
+    return axios.get(URL + "/api/users/signin/"+username+"/"+password).then((res) => {
+        return (res.data != null) ? res.data : false
+    }).catch(err => {
+        return false
+    }) //todo, awaiting conversion to body from api call
 }
 
