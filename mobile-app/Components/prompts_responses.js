@@ -10,6 +10,6 @@ export const TEXT_INSTRUCTIONS = {
     },
     "on_delivery": {
         header_instruction: "Drop Off The Passenger",
-        button_instruction: "The passenger has been dropped off"
+        button_instruction: "End Trip"
     },
 }
