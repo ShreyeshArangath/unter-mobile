@@ -2,13 +2,21 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {API_BASE_URL} from '@env'; 
 
-const URL = "http://10.161.167.229:9001"
+const URL = "http://10.161.59.77:9001"
 
+export const GetAllUsers = () => {
+    console.info("Getting all users...")
+    return axios.get(URL + "/api/users/all").then((res)=>{
+        return (res.data && !Object.keys(res.data).length == 0) ? res.data : false;
+    }).catch(err => {
+        console.log(err);
+        return false;
+    })
+}
 export const GetTripByID = (tripId) => {
     console.info("Getting trip ID...");
     return axios.get(URL + "/api/trips/id/"+tripId).then((res) => {
         return (res.data && !Object.keys(res.data).length == 0) ?  res.data : false;
-        return false;
     }).catch(err => {
         console.log(err)
         return false;
@@ -157,34 +165,5 @@ export const ChangeTripInfo = (tripID, attr) => {
         console.log(err);
         return false;
     })
-}
-
-export const CreateUserFrontend = (username, password, fname, lname, phone, type) => {
-    console.info("Creating new user in firebase... from API call.");
-    console.info("Data passed as %s %s %s %s %s %s", username, password, fname, lname, phone, type)
-    return axios.post(URL + "/api/users/create", 
-    {
-        'username': username,
-        'password': password,
-        'fname' : fname,
-        'lname' : lname,
-        'phone' : phone, //ITS CALLED PHONE
-        'userType': type,
-    }).then((res) => {
-        return (res.data != null) ? res.data : false
-    }).catch(err => {
-        return false
-    })
-}
-
-//export const updateUserFrontend = ()
-
-export const SignInUserFrontend = (username, password) => {
-    console.info("Attempting sign in from API call"+username+"/"+password)
-    return axios.get(URL + "/api/users/signin/"+username+"/"+password).then((res) => {
-        return (res.data != null) ? res.data : false
-    }).catch(err => {
-        return false
-    }) //todo, awaiting conversion to body from api call
 }
 

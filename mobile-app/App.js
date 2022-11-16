@@ -3,6 +3,7 @@ import { NavigationContainer} from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
 import { Passenger_Splash, Passenger_PickLocation, LogoTitle, Passenger_ConfirmLocation, Passenger_Ride } from "./Screens/PassengerScreens";
 import { Driver_Splash, Driver_Finding_Trip, Driver_Mapping} from "./Screens/DriverScreens";
+import { Admin_Splash, Admin_View_Trips, Admin_View_Trip_info, Admin_View_Users, Admin_View_Users_info} from "./Screens/AdminScreens"
 import { TopMenuBar } from "./Components/TopMenuBar";
 import {useState, useEffect} from 'react'
 import * as Location from 'expo-location';
@@ -18,6 +19,7 @@ LogBox.ignoreLogs([
 const HomeStack = createStackNavigator();
 const DriverStack = createStackNavigator();
 const PassengerStack = createStackNavigator();
+const AdminStack = createStackNavigator();
 
 //TODO:API-Call to get the current user's userName 
 const dummyPassenger = {
@@ -46,31 +48,39 @@ const PassengerScreens = ({route, navigation}) => {
         screenOptions={{
             headerBackTitleVisible: false,
             headerMode: 'float'
-          }}>
+        }}>
+
+          <PassengerStack.Screen 
+            name="Passenger_Splash"
+            component={Passenger_Splash} 
+            options = {{
+              title: null, 
+              headerTransparent: true, 
+              headerBackVisible: true}}
+          />
           
-            <PassengerStack.Screen 
-                name="Passenger_PickLocation"
-                component={Passenger_PickLocation} 
-                initialParams={{
-                  "region": route.params.region,
-                  "position": route.params.position, 
-                  "user": dummyPassenger.KeaG7oWA9tGo067gcByO, 
-                  "color": "#E5E5E5"
-                }}
-                options = {UnterHeaderOptions}
-            />
-        
+          <PassengerStack.Screen 
+            name="Passenger_PickLocation"
+            component={Passenger_PickLocation} 
+            initialParams={{
+              "region": route.params.region,
+              "position": route.params.position, 
+              "user": dummyPassenger.KeaG7oWA9tGo067gcByO, 
+              "color": "#E5E5E5"
+            }}
+            options = {UnterHeaderOptions}
+          />
 
-        <PassengerStack.Screen 
-                name="Passenger_ConfirmLocation"
-                component={Passenger_ConfirmLocation} 
-                options = {UnterHeaderOptions}
-            />
+          <PassengerStack.Screen 
+            name="Passenger_ConfirmLocation"
+            component={Passenger_ConfirmLocation} 
+            options = {UnterHeaderOptions}
+          />
 
-        <PassengerStack.Screen 
-                  name="Passenger_Ride"
-                  component={Passenger_Ride}
-                  options = {UnterHeaderOptions}
+          <PassengerStack.Screen 
+            name="Passenger_Ride"
+            component={Passenger_Ride}
+            options = {UnterHeaderOptions}
           />
         </PassengerStack.Navigator>
     )
@@ -117,6 +127,43 @@ const DriverScreens = ({route, navigation}) => {
     </DriverStack.Navigator>
   )
 }
+
+const AdminScreens = (navigation) => {
+    return (
+        <AdminStack.Navigator
+        screenOptions={{
+          headerBackTitleVisible: false
+        }}>
+
+            <AdminStack.Screen
+                name="Admin_Splash"
+                component={Admin_Splash}
+                options={{title: null, headerTransparent: true}} 
+            />
+
+            <AdminStack.Screen 
+                name="Admin_View_Trips"
+                component={Admin_View_Trips}
+            />
+
+            <AdminStack.Screen
+                name="Admin_View_Trip_info"
+                component={Admin_View_Trip_info}
+            />
+
+            <AdminStack.Screen 
+                name="Admin_View_Users"
+                component={Admin_View_Users}
+            />
+
+            <AdminStack.Screen
+                name="Admin_View_Users_info"
+                component={Admin_View_Users_info}
+            />
+
+        </AdminStack.Navigator>
+    )
+}
   
 
 
@@ -131,6 +178,7 @@ const HomeNavigation = (props) => {
       <HomeStack.Screen  name="Unter" component={Unter} initialParams={{region: props.region}}/>
       <HomeStack.Screen name="Passenger" component={PassengerScreens} initialParams={{region: props.region, position: props.position}} />
       <HomeStack.Screen name="Driver" component={DriverScreens} initialParams={{region: props.region}} />
+      <HomeStack.Screen name="Admin" component={AdminScreens} initialParams={{region: props.region, position: props.position}} />
     </HomeStack.Navigator>
   )
 }

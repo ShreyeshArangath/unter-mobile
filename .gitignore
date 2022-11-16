@@ -1,4 +1,8 @@
 # macOS
 .DS_Store
 .expo/
+<<<<<<< HEAD
 node_modules
+=======
+.vscode/
+>>>>>>> 4a7603599419c56c0b0025d7a8a314d21749dd90

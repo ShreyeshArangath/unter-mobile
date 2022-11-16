@@ -12,6 +12,11 @@ export default function GoogleMapSearch(props) {
     return (
     <GooglePlacesAutocomplete
         placeholder={props.placeholder}
+        textInputProps={{
+          placeholderTextColor: '#808080',
+          fontWeight: "400",
+          returnKeyType: "search"
+        }}
         fetchDetails={true}
         onPress={(data, details) => {
           props.setter({
@@ -46,7 +51,7 @@ export default function GoogleMapSearch(props) {
     },
     textInputContainer:{
         borderRadius: 50,
-        width: "90%",
+        width: "100%",
         margin: 5,
         flexDirection: 'row',
         alignItems: 'center',
