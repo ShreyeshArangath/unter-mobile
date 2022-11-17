@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {API_BASE_URL} from '@env'; 
 
-const URL = "http://10.161.59.77:9001"
+const URL = "http://100.70.116.10:9001"
 
 export const GetAllUsers = () => {
     console.info("Getting all users...")
