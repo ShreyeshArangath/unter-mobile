@@ -34,7 +34,7 @@ export const Admin_Splash = ({ navigation }) => {
 
     return (
         <NativeBaseProvider>
-            <Container h="100%" w="100%" maxWidth="100%" bg="#5ccfe0" flex={1} justifyContent='center' alignItems='center'>
+            <Container h="100%" w="100%" maxWidth="100%" bg="#729EA1" flex={1} justifyContent='center' alignItems='center'>
                 <Center style={{margin: 30}}>
                     <Text fontSize="6xl" color="#FFFFFF">Unter</Text>
                     <Text fontSize="xl" color="#FFFFFF">Admin</Text>

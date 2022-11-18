@@ -4,61 +4,43 @@ import {
     Flex,
     Text,
     Container,
-    Spinner,
-    ScrollView,
+    Pressable,
+    ScrollView
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { TripButton } from '../../Components/TripButton';
 import * as Api from '../../api/api_Calls'
-const { Timestamp } = require("firebase/firestore")
 
 export const Admin_View_Trips = ({navigation, route}) => {
     const [trips, setTrips] = useState(route.params.trips)//TODO: add refresh
-    const [loadingSelectedTrip, changeLoadingTrip] = useState(null);
-
 
     function showBriefTripInfo(tripID){
         const trip_start_time = new Date(trips[tripID].startTime?.seconds * 1000).toLocaleString()
         return (
-        <Box flex={1} width="100%" key={tripID} bg={"#4abdbf"} style={{paddingHorizontal:"4%"}}>
-            {
-            (tripID != loadingSelectedTrip)?
-            <TripButton text={tripID} color={"white"} textColor={"black"} onPress={()=> nextScreen(tripID)} />:
-            <Flex direction='row' bg="#ffffff">
-                <Text>{"Loading Trip" + loadingSelectedTrip}</Text>
-                <Spinner accessibilityLabel={"Loading Trip" + loadingSelectedTrip}></Spinner>
-            </Flex>
-            }
-            <Flex direction='row'>
-                <Text>{" Trip Passenger: " + trips[tripID].passID}</Text>
-                <Text marginLeft={"auto"}>{trip_start_time}</Text>
-            </Flex>
-            <Flex direction='row'>
-                <Text>{" Trip Driver: " + trips[tripID].driverID}</Text>
-                <Text marginLeft={"auto"}>status: {trips[tripID].status}</Text>
-            </Flex>
+        <Box flex={1} width="100%" key={tripID} bg={"#729EA1"} style={{margin:5, borderRadius:10}}>
+            <Pressable h="100%" w="100%" maxWidth="100%" onPress={()=> nextScreen(tripID)}>
+                <Text color={"white"} textColor={"black"} textAlign={"center"} margin={"5px"}>{tripID}</Text>
+                <Container bg={"#242424"} w="100%" maxWidth="100%"  style={{paddingHorizontal:10, paddingVertical:5, borderRadius:10}}>
+                    <Flex direction='row'>
+                        <Text color={"white"} >{"Passenger: " + trips[tripID].passID}</Text>
+                        <Text color={"white"} flex={"1"} textAlign={"right"}>{trip_start_time}</Text>
+                    </Flex>
+                    <Flex direction='row'>
+                        <Text color={"white"}>{"Driver: " + trips[tripID].driverID}</Text>
+                        <Text color={"white"} flex={"1"} textAlign={"right"}>status: {trips[tripID].status}</Text>
+                    </Flex>
+                </Container>
+            </Pressable>
         </Box>)
     }
 
     const nextScreen = (tripID) => {
-        changeLoadingTrip(tripID);
-        Api.GetTripByID(tripID).then(resp => {
-            let SelectedTrip = []
-            for(var x in resp)
-            {
-                SelectedTrip.push({"id": x, "data": resp[x]})
-            }
-            changeLoadingTrip(null);
-            navigation.push("Admin_View_Trip_info", {"SelectedTrip":SelectedTrip[0]})
-        }).catch(err =>{
-            console.log(err)
-        })
+        navigation.push("Admin_View_Trip_info", {"tripID": tripID, "trip": trips[tripID]})
     }
 
     return (
         <NativeBaseProvider>
             <ScrollView>
-                <Container h="100%" w="100%" maxWidth="100%" bg="#5ccfe0" flex={1} justifyContent='center' alignItems='center'>
+                <Container style={{height:"100%", width:"100%", maxWidth:"100%", justifyContent:'center', alignItems:'center', padding:10}}>
                     {Object.keys(trips).map((tripID) => (showBriefTripInfo(tripID)) )}
                 </Container>
             </ScrollView>

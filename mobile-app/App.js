@@ -142,11 +142,13 @@ const AdminScreens = (navigation) => {
             <AdminStack.Screen 
                 name="Admin_View_Trips"
                 component={Admin_View_Trips}
+                options={{title: "View Trips"}} 
             />
 
             <AdminStack.Screen
                 name="Admin_View_Trip_info"
                 component={Admin_View_Trip_info}
+                options={{title: "View Specific Trip"}} 
             />
 
             <AdminStack.Screen 
