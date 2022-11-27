@@ -1,47 +1,43 @@
 import {
-    Box,
     NativeBaseProvider,
-    Flex,
     Text,
     Container
 } from 'native-base';
-import {Alert, Image} from 'react-native'
 import React, { useEffect, useState } from 'react';
 import GoogleMap from '../../Components/google_map';
-import { Marker } from 'react-native-maps';
 import { renderDirection } from '../../Components/map_direction';
 import { fireStore, realTimeDatabase } from "../../api/firebase";
 import DriverImage from '../../assets/among_us_red.png';
+import PinImage from '../../assets/Pin.png';
 import { off, onValue, ref } from 'firebase/database';
-
-
+import { TripButton } from '../../Components/TripButton';
+import { renderMarker } from '../../Components/map_marker';
+import * as Api from '../../api/api_Calls'
 
 export const Admin_View_Trip_info = ({navigation, route}) =>{
     const [tripID, setTripID] = useState(route.params.tripID)
     const [trip, setTrip] = useState(route.params.trip)//TODO: add refresh
+    const [duration, setDuration] = useState(0) //API returns duration in mins
+    const [distance, setDistance] = useState(0)
 
-    function startDate()
-    {
-        return new Date(trip.startTime.seconds*1000);
-    }
-    function endDate()
-    {
-        return new Date(trip.endTime.seconds*1000);
-    }
+    const startTime =  new Date(trip.startTime.seconds*1000)
+    const endTime = new Date(trip.endTime.seconds*1000)
+    
     function diffTime()
     {
-        var hr = 0, min = 0, sec = 0;
-        hr = Math.floor((endDate()-startDate())/3600000)
-        min = Math.floor(((endDate()-startDate())-(hr*3600000))/60000)
-        sec = Math.floor(( (endDate()-startDate())-(hr*3600000)-(min*60000))/1000)
-        return "" + hr+"hr:"+min+"min."+sec+"sec ";
+        const hr = (Math.floor((endTime - startTime)/1000/3600))%60
+        const min = (Math.floor((endTime - startTime)/1000/60))%60
+        const sec = (endTime - startTime)%60
+        return (`${hr}:${('0'+min).slice(-2)}:${('0'+sec).slice(-2)}`);
     }
     
     const [directions, setDirections] = useState(
         renderDirection(
             trip.startLoc, 
             trip.endLoc,
-            (res) => {}
+            (res) => {
+                setDuration(res.duration)
+                setDistance(res.distance)}
         )
     )
     const [driverId, setDriverId] = useState(null)
@@ -69,52 +65,56 @@ export const Admin_View_Trip_info = ({navigation, route}) =>{
         return (() => off(dbref))
     }, [driverId, driverLoc])
 
-
-    const renderDriverMarker = (loc, id) => {
-        if(loc){
-            return(
-                <Marker identifier={id} coordinate={{latitude: loc.latitude, longitude: loc.longitude}}> 
-                    <Image
-                        source={DriverImage}
-                        style={{width: 25, height: 35}}
-                        resizeMode="cover"
-                    />
-                </Marker>
-            ) 
-        }
+    const navPassenger= () => {
+        Api.GetUserByID(trip.passID)
+        .then(resp => {
+            navigation.push("Admin_View_Users_info", {"userID":trip.passID, "user":resp[trip.passID]})
+        }).catch(err =>{
+            console.log(err)
+        })
     }
 
-    const renderMarker = (loc, id) => {
-        return <Marker identifier={id} coordinate={{latitude: loc.latitude, longitude: loc.longitude}}/>
+    const navDriver= () => {
+        Api.GetUserByID(trip.driverID)
+        .then(resp => {
+            navigation.push("Admin_View_Users_info", {"userID":trip.driverID, "user":resp[trip.driverID]})
+        }).catch(err =>{
+            console.log(err)
+        })
     }
 
     return (
         <NativeBaseProvider>
-            <Box bg={"#729EA1"} paddingLeft={"2.5%"} paddingRight={"2.5%"}>
+            <GoogleMap 
+                style={{height:170}}
+                directions={directions}
+                originMarker={renderMarker(trip.startLoc, PinImage, "origin")}
+                destinationMarker={renderMarker(trip.endLoc, PinImage, "destination")}
+                driverMarker={(trip.status!="completed"&&driverLoc)?renderMarker(driverLoc, DriverImage, "driver"):null}
+                startingRegion={mapsRegion} />
+
+            <Container style={{width:"100%", maxWidth:"100%"}}>
                 <Container bg={'#618d90'} style={{width:"100%", maxWidth:"100%", alignContent:"center"}}>
                     <Text color={"white"} textColor={"black"} textAlign={"center"} margin={"5px"} alignSelf={"center"}>{"Trip ID: " + tripID}</Text>
                 </Container>
-                <Flex direction='row'>
-                    <Text>{"Passenger: " + trip.passID}</Text>
-                    <Text marginLeft={"auto"}>{"Status: " + trip.status}</Text>
-                </Flex>
-                <Text>{"Driver: " + trip.driverID}</Text>
-                <Flex flexDir={"row"}>
-                    <Text>{("\nDate: " + startDate()).substring(0, 21)}</Text>
-                    <Text marginLeft="auto">{("\nDuration : " + diffTime())}</Text>
-                </Flex>
-                <Flex flexDir="row">
-                    <Text>{"\nstart Time: " + startDate().toLocaleTimeString()}</Text>
-                    <Text marginLeft="auto">{"\nend Time: " + endDate().toLocaleTimeString()}</Text>
-                </Flex>
-                <Text>{"\nTrip Rating: " + ((trip.passRating != -1)?trip.passRating:"N/A")}</Text>
-            </Box>
-            <Container flex={2} minWidth="100%">
-            <GoogleMap directions={directions}
-                originMarker={renderMarker(trip.startLoc, "origin")}
-                destinationMarker={renderMarker(trip.endLoc, "destination")}
-                driverMarker={renderDriverMarker(((trip.status != "completed")?driverLoc:null), "driver")}
-                startingRegion={mapsRegion} />
+                <Container style={{width:"100%", maxWidth:"100%"}}>
+                    <Container style={{width:"100%", maxWidth:"100%", margin:15}}>
+                        <Text>Start: {startTime.toUTCString()}</Text>
+                        <Text>End: {endTime.toUTCString()}</Text>
+                        <Text style={{marginBottom:7}}>{("Duration : " + diffTime())}</Text>
+                        <Text>{"Status: " + trip.status}</Text>
+                    </Container>
+                    <Container style={{width:"100%", maxWidth:"100%", margin:15}}>
+                        <Text>{"Passenger: " + trip.passID}</Text>
+                        <Text>{"Passenger Trip Rating: " + ((trip.passRating != -1)?trip.passRating:"N/A")}</Text>
+                        <TripButton text={"Go to Passenger"} onPress={navPassenger}/>
+                    </Container>
+                    <Container style={{width:"100%", maxWidth:"100%", margin:15}}>
+                        <Text>{"Driver: " + trip.driverID}</Text>
+                        <Text>{"Driver Trip Rating: " + ((trip.driverRating != -1)?trip.driverRating:"N/A")}</Text>
+                        <TripButton text={"Go to Driver"} onPress={navDriver}/>
+                    </Container>
+                </Container>
             </Container>
         </NativeBaseProvider>
     )

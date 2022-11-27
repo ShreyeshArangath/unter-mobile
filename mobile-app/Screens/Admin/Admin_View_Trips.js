@@ -8,7 +8,6 @@ import {
     ScrollView
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import * as Api from '../../api/api_Calls'
 
 export const Admin_View_Trips = ({navigation, route}) => {
     const [trips, setTrips] = useState(route.params.trips)//TODO: add refresh
@@ -21,12 +20,14 @@ export const Admin_View_Trips = ({navigation, route}) => {
                 <Text color={"white"} textColor={"black"} textAlign={"center"} margin={"5px"}>{tripID}</Text>
                 <Container bg={"#242424"} w="100%" maxWidth="100%"  style={{paddingHorizontal:10, paddingVertical:5, borderRadius:10}}>
                     <Flex direction='row'>
-                        <Text color={"white"} >{"Passenger: " + trips[tripID].passID}</Text>
-                        <Text color={"white"} flex={"1"} textAlign={"right"}>{trip_start_time}</Text>
+                        <Text color={"white"}>{trip_start_time}</Text>
+                        <Text color={"white"} flex={"1"} textAlign={"right"}>{trips[tripID].status}</Text>
                     </Flex>
                     <Flex direction='row'>
                         <Text color={"white"}>{"Driver: " + trips[tripID].driverID}</Text>
-                        <Text color={"white"} flex={"1"} textAlign={"right"}>status: {trips[tripID].status}</Text>
+                    </Flex>
+                    <Flex direction='row'>
+                        <Text color={"white"}>{"Passenger: " + trips[tripID].passID}</Text>
                     </Flex>
                 </Container>
             </Pressable>

@@ -26,7 +26,7 @@ export const Admin_Splash = ({ navigation }) => {
         setLoading(true);
         Api.GetAllUsers().then(resp => {
             setLoading(false)
-            navigation.push("Admin_View_Users", {"trips":resp})
+            navigation.push("Admin_View_Users", {"users":resp})
         }).catch(err =>{
             console.log(err)
         })
