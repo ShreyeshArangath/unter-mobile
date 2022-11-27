@@ -21,7 +21,8 @@ export const Passenger_PickLocation = ({route, navigation}) => {
             "color": "#E5E5E5",
             "region": route.params.region, 
             "origin": origin, 
-            "destination": destination
+            "destination": destination, 
+            "userID": route.params.userID
         })
     }
 

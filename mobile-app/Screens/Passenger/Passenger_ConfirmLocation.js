@@ -30,7 +30,7 @@ export const Passenger_ConfirmLocation = ({route, navigation}) => {
 
     const confirmTripInfo = async (passenger) => {
         StartTrip(
-            "Devin",// TODO: Get passenger ID from above 
+            route.params.userID,// TODO: Get passenger ID from above 
             {
                 'start_latitude': origin.latitude,
                 'start_longitude': origin.longitude,
@@ -56,7 +56,9 @@ export const Passenger_ConfirmLocation = ({route, navigation}) => {
             "region": route.params.region, 
             "origin": origin, 
             "destination": destination,
-            "tripId": tripId
+            "tripId": tripId, 
+            "duration": duration.toFixed(0),
+            "userID": route.params.userID
         })
     }
 
