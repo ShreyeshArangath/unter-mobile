@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {API_BASE_URL} from '@env'; 
 
-const URL = "https://6f48-173-230-86-30.ngrok.io"
+const URL = "https://d9a2-173-230-86-25.ngrok.io"
 
 export const GetAllUsers = () => {
     console.info("Getting all users...")

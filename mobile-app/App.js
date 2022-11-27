@@ -21,7 +21,7 @@ const AdminStack = createStackNavigator();
 
 //TODO:API-Call to get the current user's userName 
 const dummyPassenger = {
-  "63MwWi3KaQxECaQbAoEn": {
+  "BjenE9wdBRdBV9egLMmH": {
       dob: "06-28-2000",
       fName: "Hans",
       lName: "Nee", 
@@ -62,8 +62,8 @@ const PassengerScreens = ({route, navigation}) => {
             initialParams={{
               "region": route.params.region,
               "position": route.params.position, 
-              "user": dummyPassenger["63MwWi3KaQxECaQbAoEn"],
-              "userID":  "63MwWi3KaQxECaQbAoEn",
+              "user": dummyPassenger["BjenE9wdBRdBV9egLMmH"],
+              "userID":  "BjenE9wdBRdBV9egLMmH",
               "color": "#E5E5E5"
             }}
             options = {UnterHeaderOptions}
