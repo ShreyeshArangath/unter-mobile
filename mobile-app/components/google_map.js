@@ -13,15 +13,31 @@ export default function GoogleMap(props) {
     
     const mapRef = useRef(null)
     useEffect(() => {
-        if (props.originMarker && props.destinationMarker) mapRef.current.fitToSuppliedMarkers(["origin", "destination"], {edgePadding: {left: 50, right: 50}}, true)
+        if (props.originMarker && props.destinationMarker) mapRef.current.fitToSuppliedMarkers(
+                ["origin", "destination"], {edgePadding: {top: 43, bottom: 20, left: 50, right: 50}}, true
+            )
     }, [])
 
     const [region, setRegion] = useState((props.startingRegion==undefined)?TexasTechDefaultRegion:props.startingRegion)
+
+    function getRegion(origin, destination, zoom) {
+        const oLat = Math.abs(origin.latitude);
+        const oLng = Math.abs(origin.longitude);
+        const dLat = Math.abs(destination.latitude);
+        const dLng = Math.abs(destination.longitude);
+      
+        return {
+            latitude: (origin.latitude + destination.latitude) / 2,
+            longitude: (origin.longitude + destination.longitude) / 2,
+            latitudeDelta: Math.abs(oLat - dLat) + zoom,
+            longitudeDelta: Math.abs(oLng - dLng) + zoom,
+        };                                                                                  
+      }
     
     return (
             <MapView
-            ref={mapRef}
-                style={ styles.map }
+                ref={mapRef}
+                style={ props.style ? props.style : styles.map }
                 provider={PROVIDER_GOOGLE}
                 followsUserLocation
                 showsMyLocationButton

@@ -6,19 +6,34 @@ import {
     Text
 } from 'native-base';
 import { TripButton } from '../../Components/TripButton';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { SplashHeader } from '../../Components/SplashHeader';
-
-
-
+import * as Api from '../../api/api_Calls'
 
 export const Passenger_Splash = ({ navigation, route }) => {
+    const [userID, setUserID] = useState("Wzy8ScBJgiVaQBImQvMi")//TODO: Get this from authentication
+    const [user, setUser] = useState(        
+        {
+            "type":"driver",
+            "username": "Tyler",
+            "fName": "Tyler"
+        }
+    )
+
    const navigate_PickLocation = () => {
         navigation.push("Passenger_PickLocation")
    }   
-   const navigate_PastTrips = () => {
-        navigation.push("TODO_ADD_GET_ALL_TRIPS_PAGE", {
-            "region": route.params.region
+
+       const navPastTrips = () => {
+        Api.GetPassengerTripHistory(userID).then(resp => {
+            navigation.navigate( "Admin",
+                {
+                    screen: "Admin_View_Trips", 
+                    params: {"trips":resp}
+                }
+                )
+        }).catch(err =>{
+            console.log(err)
         })
     }
 
@@ -29,7 +44,7 @@ export const Passenger_Splash = ({ navigation, route }) => {
             <Center style={{margin: 30}}>
                 <TripButton text="Start Your Journey" color={"white"} textColor={"black"} onPress={navigate_PickLocation} />
 
-                <TripButton text="View Past Trips" color={"white"} textColor={"black"} onPress={navigate_PastTrips} />
+                <TripButton text="View Past Trips" color={"white"} textColor={"black"} onPress={navPastTrips} />
             </Center>
         </Container>
     </NativeBaseProvider>
