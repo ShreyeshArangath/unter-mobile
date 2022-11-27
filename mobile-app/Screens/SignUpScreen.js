@@ -22,7 +22,7 @@ import {useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import * as Api from '../api/api_Calls';
 import {GOOGLE_MAPS_API_KEY} from '@env'
-import { Login_Splash } from './LoginScreen';
+
 
   
 
@@ -50,13 +50,15 @@ export const SignUp_Splash = ({navigation, route }) => {
     const signUpUser = (type) => {
         console.log("Frontend Attempting Sign Up, values are %s %s %s %s %s", username, password, fname, lname, phone)
         Api.CreateUserFrontend(username, password, fname, lname, phone, type).then((localUser)=>{
-        if(localUser)
-            {
-                setUser(localUser)
-                navigation.navigate(localUser["userType"], {
-                    "region": route.params.region
-                })  
-            }})
+            setUser(localUser)
+            console.log(localUser, "from nav attempt")
+            navigation.navigate(localUser["type"], {
+                "region": route.params.region
+            })
+        }).catch(err => {
+            console.log(err)
+            return false
+        })
     }
 
     const back = () => {
@@ -69,11 +71,11 @@ export const SignUp_Splash = ({navigation, route }) => {
     return (
         <NativeBaseProvider>
             <Container h="100%" w="100%" maxWidth="100%" bg="#230903" flex={1} justifyContent='center' alignItems='center'>
-                <Stack style={{margin:-10}}>
+                <Stack style={{margin:-10}} alignItems='center'>
                     <Image source ={icon} alt="Nani" style={{height:50, width:50, resizeMode: 'contain'}}/>
                     <Text fontSize="3xl" color="#FFFFFF">Sign Up!</Text>
                 </Stack>
-                <Stack style={{margin:20}}>
+                <Stack style={{margin:20}} alignItems='center'>
                     <Input onChangeText={changeUN} variant = "underlined" placeholder = "TTU eMail" type={show ? "text" : "usernameField"} w="100%"color="#FFFFFF"/>
                     <Input onChangeText={changePW} variant = "underlined" placeholder = "Password" type={show ? "text" : "passwordField"}w="100%"color="#FFFFFF"/>
                     <Input onChangeText={changeFN} variant = "underlined" placeholder = "First Name" type={show ? "text" : "fnameField"} w="100%"color="#FFFFFF"/>

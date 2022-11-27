@@ -60,7 +60,7 @@ export const Login_Splash = ({navigation, route }) => {
             if(localUser)
             {
                 setUser(localUser)
-                navigation.navigate(localUser["userType"], {
+                navigation.navigate(localUser["type"], {
                     "region": route.params.region
                 })  
             }})
@@ -80,13 +80,10 @@ export const Login_Splash = ({navigation, route }) => {
     const show = true
     return (
         <NativeBaseProvider>
-            <Container h="100%" w="100%" maxWidth="100%" bg="#230903" flex={1} justifyContent='center' alignItems='center'>
-                <Stack style={{margin:-10}}>
-                    <Image source ={icon} alt="Nani" style={{height:50, width:50, resizeMode: 'contain'}}/>
+            <Container h="100%" w="100%" maxWidth="100%" bg="#230903" flex={1} alignItems='center' justifyContent='baseline'>
+                <Stack style={{margin:30}} alignItems="center" justifyContent='center'>
+                    <Image source ={icon} alt="Nani" style={{height:120, width:90, resizeMode: 'contain'}}/>
                     <Text fontSize="6xl" color="#FFFFFF">Unter</Text>
-                    <Text fontSize="3xl" color="#FFFFFF">Login</Text>
-                </Stack>
-                <Stack style={{margin:20}}>
                     <Input onChangeText={changeUN} variant = "underlined" placeholder = "TTU eMail" type={show ? "text" : "usernameField"} w="100%"color="#FFFFFF"/>
                     <Input onChangeText={changePW} variant = "underlined" placeholder = "Password" type={show ? "text" : "passwordField"}w="100%"color="#FFFFFF"/>
                     <TripButton text="Sign In" colorScheme="default" variant="outline" onPress={() => signInUser()}/>
