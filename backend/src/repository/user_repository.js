@@ -1,5 +1,5 @@
 const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } = require("firebase/auth");
-const {collection, doc, getDocs, addDoc, deleteDoc, query, where, updateDoc} = require("firebase/firestore")
+const {collection, doc, getDocs, addDoc, deleteDoc, query, where, updateDoc, setDoc} = require("firebase/firestore")
 
 
 class UserRepository {
@@ -42,29 +42,27 @@ class UserRepository {
         var user
         var username = userData.username
         var password = userData.password
-        createUserWithEmailAndPassword(auth, username, password)
+        return createUserWithEmailAndPassword(auth, username, password)
         .then((userCredential) => {
-            console.log("Logged In")
-            user = userCredential
+            console.log(userCredential.user.uid)
+            user = userCredential.user.uid
+            setDoc(doc(this._dbz, "Users", userCredential.user.uid), userData)
+            console.log("returning user: ", user)
+            return user
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
         })
-        let newUser = await addDoc(
-            collection(this._dbz, "Users"),
-            userData
-        )
-        return user
     }
 
     async signInUser(username, password) {
         const auth = getAuth()
         var user
-        signInWithEmailAndPassword(auth, username, password)
+        return signInWithEmailAndPassword(auth, username, password)
         .then((userCredential) => {
-            console.log("Signing in as " + userCredential.user)
-            user = userCredential.user
+            console.log("Signing in as " + userCredential.user.uid)
+            user = userCredential.user.uid
             console.log("Signed in as user " + user)
             return user
         })

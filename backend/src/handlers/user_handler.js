@@ -74,14 +74,8 @@ function getUserHandler(UserController)
         console.log("Attempting routing")
         try {  
             const userData = req.body
-            if (true){
-
-                const data = await UserController.createUser(userData)
-                res.json(data)
-            } else {
-                res.status(400)
-                res.send("Check request parameters/body")
-            }
+            const data = await UserController.createUser(userData)
+            res.send(data)
         }catch(err) {
             const errMessage = "Error while creating user: " + err.message
             res.status(404)
@@ -98,7 +92,7 @@ function getUserHandler(UserController)
             if (true){
 
                 const data = await UserController.signInUser(username, password)
-                res.json(data)
+                res.send(data)
             } else {
                 res.status(400)
                 res.send("Check request parameters/body")

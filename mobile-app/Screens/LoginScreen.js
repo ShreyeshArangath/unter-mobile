@@ -54,16 +54,24 @@ export const Login_Splash = ({navigation, route }) => {
     const [user, setUser] = useState(null);
 
 
-    const signInUser = () => {
+    const signInUser = async() => {
         console.log("Frontend Attempting Sign In")
-        Api.SignInUserFrontend(username, password).then((localUser)=>{
-            if(localUser)
+        await Api.SignInUserFrontend(username, password).then((uid)=>{
+            console.log("Returned user id is " + uid)
+            Api.GetUserByID(uid).then((localUser) => 
             {
                 setUser(localUser)
-                navigation.navigate(localUser["type"], {
-                    "region": route.params.region
-                })  
-            }})
+                console.log(localUser, "from nav attempt")
+                const userData = localUser[uid]
+                console.log(userData);
+                navigation.navigate(userData["type"], {
+                "region": route.params.region
+            })
+            })
+        }).catch(err => {
+            console.log(err)
+            return false
+        })
     }
 
     const signUpUser = () => {

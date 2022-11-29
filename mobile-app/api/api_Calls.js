@@ -3,7 +3,7 @@ import axios from 'axios'
 import {API_BASE_URL} from '@env'; 
 import { addTextAndPropsToStrings } from 'native-base';
 
-const URL = "http://10.161.5.127:9001"
+const URL = "http://172.20.10.2:9001"
 
 export const GetAllUsers = () => {
     console.info("Getting all users...")
@@ -187,8 +187,6 @@ export const CreateUserFrontend = (username, password, fname, lname, phone, type
     })
 }
 
-//export const updateUserFrontend = ()
-
 export const SignInUserFrontend = (username, password) => {
     console.info("Attempting sign in from API call"+username+"/"+password)
     return axios.get(URL + "/api/users/signin/"+username+"/"+password).then((res) => {
@@ -198,3 +196,13 @@ export const SignInUserFrontend = (username, password) => {
     }) //todo, awaiting conversion to body from api call
 }
 
+export const GetUserByID = (userID) => {
+    console.info("Getting user info...");
+    return axios.get(URL + "/api/users/id/"+userID).then((res) => {
+        return (res.data && !Object.keys(res.data).length == 0) ?  res.data : false;
+        return false;
+    }).catch(err => {
+        console.log(err)
+        return false;
+    })
+}

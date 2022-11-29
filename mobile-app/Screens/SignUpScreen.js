@@ -47,13 +47,26 @@ export const SignUp_Splash = ({navigation, route }) => {
 
 
 
-    const signUpUser = (type) => {
+    const signUpUser = async (type) => {
+        /*username = username.trim()
+        if(username.substring(-8) != "@ttu.edu")
+            return false; //do nothing; invalid email.
+        password = password.trim()
+        fname = fname.trim()
+        lname = lname.trim()
+        phone = phone.trim()*/
         console.log("Frontend Attempting Sign Up, values are %s %s %s %s %s", username, password, fname, lname, phone)
-        Api.CreateUserFrontend(username, password, fname, lname, phone, type).then((localUser)=>{
-            setUser(localUser)
-            console.log(localUser, "from nav attempt")
-            navigation.navigate(localUser["type"], {
+        await Api.CreateUserFrontend(username, password, fname, lname, phone, type).then((uid)=>{
+            console.log("Returned user id is " + uid)
+            Api.GetUserByID(uid).then((localUser) => 
+            {
+                setUser(localUser)
+                console.log(localUser, "from nav attempt")
+                const userData = localUser[uid]
+                console.log(userData);
+                navigation.navigate(userData["type"], {
                 "region": route.params.region
+            })
             })
         }).catch(err => {
             console.log(err)
