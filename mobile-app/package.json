@@ -36,8 +36,7 @@
     "react-native-maps-directions": "^1.9.0",
     "react-native-ratings": "^8.1.0",
     "react-native-svg": "12.3.0",
-    "react-native-web": "~0.18.7",
-    "react-native-gesture-handler": "~2.5.0"
+    "react-native-web": "~0.18.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

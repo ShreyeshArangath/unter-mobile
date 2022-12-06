@@ -10,9 +10,9 @@ class UserController
         this._userRepository = userRepository
     }
     
-    async createUser(username, password, userData)
+    async createUser(userData)
     {
-        return await this._userRepository.createUser(username, password, userData);
+        return await this._userRepository.createUser(userData);
     }
 
     async deleteUser(userID)
